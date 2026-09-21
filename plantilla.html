@@ -124,6 +124,16 @@ button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--
 .docs a{color:var(--accent);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .docs a:hover{text-decoration:underline}
 .docs .mio{font-size:10px;color:var(--ink-3);border:1px solid var(--line-2);border-radius:3px;padding:1px 5px}
+.docs .quitar{margin-left:auto;flex:0 0 auto;border:0;background:none;color:var(--ink-3);font-size:17px;
+  line-height:1;padding:0 4px;min-height:0;cursor:pointer}
+.docs .quitar:hover{color:var(--crit)}
+
+.estado{font-size:12px;color:var(--ink-3);display:inline-flex;align-items:center;gap:6px}
+.estado::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ink-3);flex:0 0 auto}
+.estado.ok::before{background:var(--ok)}
+.estado.err::before{background:var(--crit)}
+.estado.err{color:var(--crit)}
+.estado.off::before{background:#e0a020}
 .vacio{color:var(--ink-3);font-size:13.5px;margin:0 0 12px}
 .addoc{display:flex;gap:7px;flex-wrap:wrap}
 .addoc input{font:inherit;font-size:13px;padding:7px 11px;border:1px solid var(--line-2);border-radius:7px;flex:1;min-width:130px}
@@ -173,6 +183,8 @@ footer p{margin:4px 0}
   <span><i class="sw b"></i> Tarea</span>
   <span><i class="sw c"></i> Camino crítico</span>
   <span><i class="sw h"></i> Control o entrega</span>
+  <span class="spacer"></span>
+  <span class="estado" id="estado">…</span>
 </div>
 
 <div class="chart"><div class="scroll" id="scroll"><div class="grid" id="grid"></div></div></div>
@@ -189,6 +201,7 @@ footer p{margin:4px 0}
 
 <script>
 const DATOS = /*__DATOS__*/{}/*__FIN__*/;
+const CFG   = /*__CFG__*/{}/*__FINCFG__*/;
 const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const DIA = ['dom','lun','mar','mié','jue','vie','sáb'];
 const HOY = '21/09/2026';
@@ -205,13 +218,72 @@ const idx = f => SES.findIndex(s => s.fecha === f);
 const desde = f => { const x = d(f); for (let i=0;i<SES.length;i++) if (d(SES[i].fecha) >= x) return i; return SES.length-1; };
 const hasta = f => { const x = d(f); for (let i=SES.length-1;i>=0;i--) if (d(SES[i].fecha) <= x) return i; return 0; };
 
-/* ---------- estado local (solo en este navegador) ---------- */
+/* ---------- estado compartido ----------
+   Con Supabase configurado, lo que marca uno lo ven todos.
+   Sin configurar, la página sigue funcionando pero solo en tu navegador. */
 const LS = {
-  get(k, def){ try { return JSON.parse(localStorage.getItem(k)) ?? def; } catch(e){ return def; } },
+  get(k, def){ try { const v = localStorage.getItem(k); return v==null ? def : JSON.parse(v); } catch(e){ return def; } },
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
 };
-let hechas = LS.get('g1-hechas', []);
-let misDocs = LS.get('g1-docs', {});
+const DB = {
+  on: !!(CFG.url && CFG.key),
+  cab(extra){
+    return Object.assign({
+      apikey: CFG.key, Authorization: 'Bearer ' + CFG.key, 'Content-Type': 'application/json',
+    }, extra || {});
+  },
+  async get(tabla){
+    const r = await fetch(CFG.url + '/rest/v1/' + tabla + '?select=*', { headers: this.cab() });
+    if (!r.ok) throw new Error(tabla + ': ' + r.status);
+    return r.json();
+  },
+  async marcar(id, hecha){
+    const r = await fetch(CFG.url + '/rest/v1/estado_tareas', {
+      method: 'POST',
+      headers: this.cab({ Prefer: 'resolution=merge-duplicates' }),
+      body: JSON.stringify({ tarea_id: id, hecha, marcado_en: new Date().toISOString() }),
+    });
+    if (!r.ok) throw new Error('marcar: ' + r.status);
+  },
+  async atar(id, nombre, url){
+    const r = await fetch(CFG.url + '/rest/v1/documentos', {
+      method: 'POST', headers: this.cab(), body: JSON.stringify({ tarea_id: id, nombre, url }),
+    });
+    if (!r.ok) throw new Error('atar: ' + r.status);
+  },
+  async desatar(docId){
+    const r = await fetch(CFG.url + '/rest/v1/documentos?id=eq.' + docId, {
+      method: 'DELETE', headers: this.cab(),
+    });
+    if (!r.ok) throw new Error('desatar: ' + r.status);
+  },
+};
+
+let hechas  = DB.on ? [] : LS.get('g1-hechas', []);
+let dbDocs  = {};                       // tarea_id -> [{id, nombre, url}]
+let misDocs = DB.on ? {} : LS.get('g1-docs', {});
+let cuando  = {};                       // tarea_id -> fecha de marcado
+
+function estado(txt, clase){
+  const el = document.getElementById('estado');
+  if (el){ el.textContent = txt; el.className = 'estado ' + (clase || ''); }
+}
+
+async function sincronizar(silencioso){
+  if (!DB.on){ estado('Sin base de datos: lo que marques solo lo ves tú', 'off'); return; }
+  try {
+    if (!silencioso) estado('Sincronizando…', '');
+    const [est, docs] = await Promise.all([DB.get('estado_tareas'), DB.get('documentos')]);
+    hechas = est.filter(x => x.hecha).map(x => x.tarea_id);
+    cuando = {}; est.forEach(x => { if (x.hecha) cuando[x.tarea_id] = x.marcado_en; });
+    dbDocs = {};
+    docs.forEach(x => { (dbDocs[x.tarea_id] = dbDocs[x.tarea_id] || []).push(x); });
+    estado('Al día — lo que marcas lo ve todo el grupo', 'ok');
+    render();
+  } catch (e) {
+    estado('Sin conexión con la base de datos: ' + e.message, 'err');
+  }
+}
 
 let fPer = null, fCrit = false, fGuia = false, fPend = false;
 
@@ -303,8 +375,13 @@ function visible(t){
 function abrir(id){
   const t = DATOS.tareas.find(x => x.id===id); if (!t) return;
   const f = FUENTE[t.fuente] || ['grupo','—'];
-  const docs = (t.docs||[]).map(x => ({...x, mio:false}))
-    .concat((misDocs[id]||[]).map(x => ({...x, mio:true})));
+  const docs = (t.docs||[]).map(x => ({...x, fijo:true}))
+    .concat((dbDocs[id]||[]).map(x => ({...x, fijo:false})))
+    .concat((misDocs[id]||[]).map(x => ({...x, fijo:false, solomio:true})));
+  const marca = cuando[t.id]
+    ? ' · marcada el ' + new Date(cuando[t.id]).toLocaleDateString('es-ES',
+        {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})
+    : '';
   document.getElementById('modal').innerHTML =
       '<button class="cerrar" data-cerrar aria-label="Cerrar">&times;</button>'
     + '<h2>'+esc(t.nombre)+'</h2>'
@@ -315,22 +392,27 @@ function abrir(id){
     +   '<dt>De dónde sale</dt><dd><span class="badge '+f[0]+'">'+f[1]+'</span>'
     +     (t.cita ? '<br><span style="font-size:12.5px;color:#8b8a85">'+esc(t.cita)+'</span>' : '')+'</dd>'
     +   (t.critica ? '<dt>Camino crítico</dt><dd><span class="badge crit">sin holgura</span></dd>' : '')
-    +   '<dt>Estado</dt><dd>'+(hechas.includes(t.id)?'Hecha':'Pendiente')+'</dd>'
+    +   '<dt>Estado</dt><dd>'+(hechas.includes(t.id)?'Hecha':'Pendiente')+marca+'</dd>'
     + '</dl>'
     + '<h3>Documentos</h3>'
     + (docs.length
         ? '<ul class="docs">'+docs.map(x =>
             '<li><a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.nombre)+'</a>'
-            + (x.mio?'<span class="mio">solo tú</span>':'')+'</li>').join('')+'</ul>'
+            + (x.solomio ? '<span class="mio">solo tú</span>' : '')
+            + (x.id ? '<button class="quitar" data-quitar="'+x.id+'" data-tarea="'+t.id+'" '
+                    + 'title="Quitar" aria-label="Quitar documento">&times;</button>' : '')
+            + '</li>').join('')+'</ul>'
         : '<p class="vacio">Todavía no hay ningún documento atado a esta tarea.</p>')
     + '<div class="addoc">'
     +   '<input id="dn" placeholder="Nombre del documento">'
     +   '<input id="du" placeholder="Enlace (OneDrive, Drive…)">'
     +   '<button data-add="'+t.id+'">Atar</button>'
     + '</div>'
-    + '<p class="nota">La página es estática, así que no puede alojar archivos: los documentos se suben a la '
-    + 'carpeta de OneDrive del grupo y aquí se ata el enlace. Lo que ates desde aquí solo lo ves tú en este '
-    + 'navegador; para que lo vea todo el grupo hay que añadirlo a <code>datos.json</code> en el repositorio.</p>';
+    + '<p class="nota">La página no puede alojar archivos: el archivo se sube a la carpeta de OneDrive del '
+    + 'grupo y aquí se guarda el enlace. '
+    + (DB.on ? 'Lo que ates lo ve todo el grupo.'
+             : 'Sin base de datos configurada, lo que ates solo lo ves tú en este navegador.')
+    + '</p>';
   document.getElementById('velo').classList.add('on');
 }
 function cerrar(){ document.getElementById('velo').classList.remove('on'); }
@@ -339,10 +421,25 @@ function cerrar(){ document.getElementById('velo').classList.remove('on'); }
 document.addEventListener('click', function(e){
   const tick = e.target.closest('[data-tick]');
   if (tick){
-    const id = tick.dataset.tick;
-    hechas = hechas.includes(id) ? hechas.filter(x => x!==id) : hechas.concat(id);
-    LS.set('g1-hechas', hechas);
+    const id = tick.dataset.tick, marcar = !hechas.includes(id);
+    const previo = hechas.slice();
+    hechas = marcar ? hechas.concat(id) : hechas.filter(x => x!==id);   // pintado optimista
+    if (marcar) cuando[id] = new Date().toISOString(); else delete cuando[id];
     render();
+    if (DB.on){
+      DB.marcar(id, marcar)
+        .then(() => estado('Al día — lo que marcas lo ve todo el grupo', 'ok'))
+        .catch(err => { hechas = previo; render(); estado('No se pudo guardar: ' + err.message, 'err'); });
+    } else {
+      LS.set('g1-hechas', hechas);
+    }
+    return;
+  }
+  const quitar = e.target.closest('[data-quitar]');
+  if (quitar){
+    const docId = quitar.dataset.quitar, id = quitar.dataset.tarea;
+    DB.desatar(docId).then(() => sincronizar(true)).then(() => abrir(id))
+      .catch(err => estado('No se pudo quitar: ' + err.message, 'err'));
     return;
   }
   const ver = e.target.closest('[data-ver]');
@@ -353,9 +450,16 @@ document.addEventListener('click', function(e){
     const n = document.getElementById('dn').value.trim();
     const u = document.getElementById('du').value.trim();
     if (!n || !u) return;
-    misDocs[id] = (misDocs[id]||[]).concat({nombre:n, url:u});
-    LS.set('g1-docs', misDocs);
-    abrir(id);
+    if (DB.on){
+      add.disabled = true;
+      DB.atar(id, n, u)
+        .then(() => sincronizar(true)).then(() => abrir(id))
+        .catch(err => { add.disabled = false; estado('No se pudo atar: ' + err.message, 'err'); });
+    } else {
+      misDocs[id] = (misDocs[id]||[]).concat({nombre:n, url:u});
+      LS.set('g1-docs', misDocs);
+      abrir(id);
+    }
     return;
   }
   if (e.target.closest('[data-cerrar]') || e.target.id==='velo') cerrar();
@@ -393,6 +497,13 @@ document.getElementById('f-pend').onclick = () => { fPend=!fPend; botones(); ren
 })();
 
 render();
+sincronizar();
+
+/* Refrescar lo que hayan marcado los demás: cada 25 s y al volver a la pestaña. */
+if (DB.on){
+  setInterval(() => { if (!document.hidden) sincronizar(true); }, 25000);
+  addEventListener('visibilitychange', () => { if (!document.hidden) sincronizar(true); });
+}
 </script>
 </body>
 </html>
