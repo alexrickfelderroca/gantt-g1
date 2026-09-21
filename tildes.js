@@ -55,6 +55,8 @@ const M = {
   bibliografia:'bibliografía', Bibliografia:'Bibliografía',
   bibliografico:'bibliográfico', bibliografica:'bibliográfica', Bibliografica:'Bibliográfica',
   video:'vídeo', Video:'Vídeo', videos:'vídeos',
+  tutoria:'tutoría', tutorias:'tutorías', Tutoria:'Tutoría',
+  examenes:'exámenes', Examenes:'Exámenes', ningun:'ningún', algun:'algún',
   Memoria:'Memoria', Anexos:'Anexos',
 };
 

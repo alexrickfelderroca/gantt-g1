@@ -12,21 +12,22 @@
 <style>
 :root{
   color-scheme:light;
-  --surface:#fcfcfb; --card:#fff; --sunken:#f4f3f0;
+  --surface:#fcfcfb; --card:#fff; --sunken:#f4f3f0; --wknd:#f0efec;
   --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#8b8a85;
   --line:#e6e4df; --line-2:#d3d0c9;
   --bar:#2a78d6; --crit:#e34948; --crit-soft:#f9dedd; --accent:#0d366b;
+  --nomb:300px;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;
-  --surface:#1a1a19; --card:#232322; --sunken:#151514;
+  --surface:#1a1a19; --card:#232322; --sunken:#151514; --wknd:#1c1c1a;
   --ink:#fff; --ink-2:#c3c2b7; --ink-3:#8b8a85;
   --line:#333331; --line-2:#44443f;
   --bar:#3987e5; --crit:#e66767; --crit-soft:#5c2b2b; --accent:#86b6ef;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --surface:#1a1a19; --card:#232322; --sunken:#151514;
+  --surface:#1a1a19; --card:#232322; --sunken:#151514; --wknd:#1c1c1a;
   --ink:#fff; --ink-2:#c3c2b7; --ink-3:#8b8a85;
   --line:#333331; --line-2:#44443f;
   --bar:#3987e5; --crit:#e66767; --crit-soft:#5c2b2b; --accent:#86b6ef;
@@ -35,9 +36,9 @@
 html,body{margin:0;padding:0}
 body{background:var(--surface);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",sans-serif;
   font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1280px;margin:0 auto;padding:0 16px 80px}
+.wrap{max-width:1440px;margin:0 auto;padding:0 16px 80px}
 
-header{padding:44px 0 26px;border-bottom:1px solid var(--line);margin-bottom:26px}
+header{padding:44px 0 26px;border-bottom:1px solid var(--line);margin-bottom:24px}
 .eyebrow{font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
 h1{font-size:clamp(28px,5vw,42px);line-height:1.08;font-weight:700;letter-spacing:-.024em;margin:0 0 10px}
 .sub{color:var(--ink-2);margin:0;max-width:62ch}
@@ -62,45 +63,64 @@ button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-co
 .sw.b{background:var(--bar)} .sw.c{background:var(--crit)}
 .sw.o{background:transparent;border:1.5px solid var(--bar)}
 .sw.d{width:8px;height:8px;transform:rotate(45deg);border-radius:1px;background:var(--ink)}
+.sw.w{background:var(--wknd);border:1px solid var(--line-2)}
 
+/* ---------- gantt ---------- */
 .chart{border:1px solid var(--line);border-radius:10px;background:var(--card);overflow:hidden}
-.scroll{overflow-x:auto}
-.grid{min-width:880px}
-.hd{display:flex;position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
-.pad{flex:0 0 300px;min-width:0;border-right:1px solid var(--line)}
-.trk{flex:1;min-width:0;position:relative}
-.hd .trk{display:flex}
-.mon{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
-  padding:11px 0 10px 8px;border-left:1px solid var(--line);overflow:hidden;white-space:nowrap}
-.mon:first-child{border-left:0}
+.scroll{overflow-x:auto;overflow-y:hidden;position:relative}
+.grid{width:max-content;min-width:100%}
+
+.hd{display:flex;position:sticky;top:0;z-index:6;background:var(--card);border-bottom:1px solid var(--line)}
+.hd .pad{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:var(--card);
+  border-right:1px solid var(--line)}
+.hd .cols{position:relative}
+.hmes{display:flex;height:26px;border-bottom:1px solid var(--line)}
+.hmes span{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);
+  padding:6px 0 0 7px;border-left:1px solid var(--line-2);overflow:hidden;white-space:nowrap}
+.hmes span:first-child{border-left:0}
+.hdia{display:flex;height:24px}
+.hdia i{font-size:10px;font-style:normal;color:var(--ink-3);text-align:center;padding-top:5px;
+  overflow:hidden;white-space:nowrap}
+.hdia i.we{background:var(--wknd)}
+.hdia i.hoy{color:var(--surface);background:var(--accent);font-weight:700;border-radius:3px}
 
 .phase{display:flex;background:var(--sunken);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.phase div{padding:9px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
-.row{display:flex;border-bottom:1px solid var(--line);min-height:31px}
+.phase b{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:var(--sunken);
+  padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.row{display:flex;border-bottom:1px solid var(--line);height:30px}
 .row:last-of-type{border-bottom:0}
-.row:hover{background:var(--sunken)}
-.row .name{flex:0 0 300px;min-width:0;overflow:hidden;padding:6px 12px 6px 14px;font-size:13px;color:var(--ink-2);
+.row .name{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:var(--card);
+  min-width:0;overflow:hidden;padding:0 12px 0 14px;font-size:13px;color:var(--ink-2);
   display:flex;align-items:center;gap:8px;border-right:1px solid var(--line)}
+.row:hover .name{background:var(--sunken)}
 .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .chip{flex:0 0 auto;font-size:9.5px;font-weight:700;letter-spacing:.04em;color:var(--ink-2);
   background:var(--sunken);border:1px solid var(--line-2);border-radius:3px;padding:2px 4px;line-height:1}
 .row:hover .chip{background:var(--card)}
-.gl{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
-.blk{position:absolute;top:0;bottom:0;background:var(--sunken);z-index:0}
-.bar{position:absolute;top:50%;transform:translateY(-50%);height:10px;border-radius:4px;background:var(--bar);min-width:4px}
+
+.trk{position:relative;flex:0 0 auto}
+.row:hover .trk{background:rgba(127,127,127,.06)}
+.blk{position:absolute;top:0;bottom:0;background:var(--sunken);opacity:.9}
+.bar{position:absolute;top:50%;transform:translateY(-50%);height:11px;border-radius:4px;
+  background:var(--bar);min-width:3px;z-index:2}
 .bar.crit{background:var(--crit)}
 .bar.corr{background:transparent;border:1.5px solid var(--bar)}
 .bar.crit.corr{border-color:var(--crit)}
 .today{position:absolute;top:0;bottom:0;width:1.5px;background:var(--accent);z-index:4}
+
 .mstrip{display:flex;border-top:1px solid var(--line-2);background:var(--card)}
-.mstrip .pad{padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
-.mstrip .trk{min-height:40px}
-.ms{position:absolute;top:14px;width:8px;height:8px;background:var(--ink);transform:rotate(45deg) translateX(-50%);
-  transform-origin:left;border-radius:1px}
+.mstrip .pad{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:var(--card);
+  padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-2);border-right:1px solid var(--line)}
+.mstrip .trk{height:40px}
+.ms{position:absolute;top:14px;width:9px;height:9px;background:var(--ink);
+  transform:rotate(45deg) translate(-50%,0);transform-origin:left;border-radius:1px;z-index:3}
 .ms.soft{background:transparent;border:1.5px solid var(--ink-3)}
 
 #tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--ink);
-  color:var(--surface);border-radius:7px;padding:9px 12px;font-size:12.5px;line-height:1.45;max-width:300px;
+  color:var(--surface);border-radius:7px;padding:9px 12px;font-size:12.5px;line-height:1.45;max-width:320px;
   box-shadow:0 8px 28px rgba(0,0,0,.22)}
 #tip b{font-weight:600} #tip .m{opacity:.72;font-size:11.5px}
 
@@ -117,9 +137,10 @@ button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-co
 
 footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
 footer p{margin:5px 0}
+.hint{font-size:12.5px;color:var(--ink-3);margin:10px 0 0}
 
 @media (max-width:780px){
-  .chart,.legend,#rango{display:none}
+  .chart,.legend,#zoom,.hint{display:none}
   .list{display:block}
   header{padding-top:28px}
   .kpi{flex:1 1 100%}
@@ -149,11 +170,13 @@ footer p{margin:5px 0}
   <button id="crit" aria-pressed="false">Solo crítico</button>
   <button id="theme">Tema</button>
 </div>
-<div class="bar-controls" id="rango">
-  <span class="lbl">Cuándo</span>
-  <button data-r="0" aria-pressed="false">Curso completo</button>
-  <button data-r="1" aria-pressed="true">1er cuatrimestre</button>
-  <button data-r="2" aria-pressed="false">2º cuatrimestre</button>
+<div class="bar-controls" id="zoom">
+  <span class="lbl">Escala</span>
+  <button data-z="0" aria-pressed="true">Días</button>
+  <button data-z="1" aria-pressed="false">Semanas</button>
+  <button data-z="2" aria-pressed="false">Curso entero</button>
+  <span class="spacer"></span>
+  <button id="ir-hoy">↦ Ir a hoy</button>
 </div>
 
 <div class="legend">
@@ -162,10 +185,12 @@ footer p{margin:5px 0}
   <span><i class="sw o"></i> Correcciones</span>
   <span><i class="sw d"></i> Hito</span>
   <span style="color:var(--accent)">│ Hoy</span>
-  <span><i class="sw" style="background:var(--sunken);border:1px solid var(--line-2)"></i> Festivo / sin sesión</span>
+  <span id="lg-finde"><i class="sw w"></i> Finde / festivo</span>
 </div>
 
-<div class="chart"><div class="scroll"><div class="grid" id="grid"></div></div></div>
+<div class="chart"><div class="scroll" id="scroll"><div class="grid" id="grid"></div></div></div>
+<p class="hint">Arrastra en horizontal para avanzar en el calendario. Pasa el ratón por una barra para ver fechas, responsable y entregable.</p>
+
 <div class="list" id="list"></div>
 
 <footer>
@@ -179,6 +204,8 @@ footer p{margin:5px 0}
 const DATOS = /*__DATOS__*/{}/*__FIN__*/;
 const HOY = new Date(2026,8,21);
 const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const DIA = ['D','L','M','X','J','V','S'];
+const MS = 864e5;
 const d = s => { const [a,b,c] = s.split('/').map(Number); return new Date(c,b-1,a); };
 const fmt = x => x.toLocaleDateString('es-ES',{day:'numeric',month:'short'});
 const corto = n => { const x = n.split(/\s*[(;]| — /)[0].trim().replace(/[,.]$/,'');
@@ -188,85 +215,122 @@ const esCorr = t => /correc/i.test(t.nombre);
 
 const tareas = DATOS.tareas.map(t => ({...t, di:d(t.inicio), df:d(t.fin)}));
 const hitos  = DATOS.hitos.map(h => ({...h, dd:d(h.fecha)}));
-const fases  = DATOS.fases.map(f => f.nombre);
 const bloqueos = (DATOS.bloqueos||[]).map(b => ({...b, bi:d(b.inicio), bf:d(b.fin)}));
+const fases  = DATOS.fases.map(f => f.nombre);
 
-const RANGOS = [
-  [new Date(2026,8,14), new Date(2027,4,20)],
-  [new Date(2026,8,14), new Date(2026,11,23)],
-  [new Date(2027,1,1),  new Date(2027,4,20)],
-];
-let rango = 1, fPer = null, fCrit = false;
+// T0 = lunes 14/09/2026, para que la trama de findes cuadre con la semana real
+const T0 = new Date(2026,8,14);
+const T1 = new Date(2027,4,23);
+const NDIAS = Math.round((T1-T0)/MS);
+const PPD = [26, 9, 3.4];               // px por día en cada escala
+let zoom = 0, fPer = null, fCrit = false;
+
+const x  = f => Math.round((f-T0)/MS) * PPD[zoom];         // px del inicio de ese día
+const xf = f => (Math.round((f-T0)/MS)+1) * PPD[zoom];     // px del final de ese día
 
 (function(){
   const p = hitos.filter(h => h.dd >= HOY).sort((a,b)=>a.dd-b.dd)[0];
   if (p) {
-    const n = Math.round((p.dd-HOY)/864e5);
+    const n = Math.round((p.dd-HOY)/MS);
     document.getElementById('k1').textContent = n + (n===1?' día':' días');
     document.getElementById('k1l').textContent = corto(p.nombre) + ' · ' + fmt(p.dd);
   }
-  document.getElementById('k2').textContent = Math.round((new Date(2027,4,5)-HOY)/864e5) + ' días';
+  document.getElementById('k2').textContent = Math.round((new Date(2027,4,5)-HOY)/MS) + ' días';
   document.getElementById('k3').textContent = tareas.length;
   document.getElementById('k3l').textContent = tareas.filter(t=>t.critica).length + ' en el camino crítico';
   document.getElementById('pie').textContent =
     tareas.length + ' tareas · ' + fases.length + ' fases · ' + hitos.length + ' hitos · del 21 sept 2026 al 13 may 2027';
 })();
 
-function render(){
-  const T0 = RANGOS[rango][0], T1 = RANGOS[rango][1], SPAN = T1-T0;
-  const pos = x => (x-T0)/SPAN*100;
-  const vis = t => t.df >= T0 && t.di <= T1;
-
-  const meses = [];
-  for (let y=T0.getFullYear(), m=T0.getMonth();;m++){
-    if (m>11){ m=0; y++; }
-    const f = new Date(y,m,1);
-    if (f > T1) break;
-    meses.push(f);
+function cabecera(){
+  const W = NDIAS * PPD[zoom];
+  // fila de meses
+  let meses = '', ini = 0;
+  for (let i=1; i<=NDIAS; i++){
+    const f = new Date(T0.getTime()+i*MS);
+    if (i===NDIAS || f.getDate()===1){
+      const f0 = new Date(T0.getTime()+ini*MS);
+      const an = f0.getFullYear()===2027 ? " '27" : '';
+      meses += '<span style="flex:0 0 '+((i-ini)*PPD[zoom])+'px">'+MES[f0.getMonth()]+an+'</span>';
+      ini = i;
+    }
   }
-  const bandas = bloqueos.filter(b => b.bf>=T0 && b.bi<=T1).map(function(b){
-    const a = Math.max(b.bi,T0), z = Math.min(b.bf,T1);
-    return '<i class="blk" style="left:'+pos(a)+'%;width:'+Math.max(pos(z)-pos(a),.25)+'%" title="'+b.motivo+'"></i>';
-  }).join('');
-  const lineas = bandas + meses.map(f => pos(f) > 0 ? '<i class="gl" style="left:'+pos(f)+'%"></i>' : '').join('')
-    + (HOY>=T0 && HOY<=T1 ? '<i class="today" style="left:'+pos(HOY)+'%"></i>' : '');
+  // fila de días (o de semanas, o nada)
+  let dias = '';
+  if (zoom === 0){
+    for (let i=0; i<NDIAS; i++){
+      const f = new Date(T0.getTime()+i*MS), g = f.getDay();
+      const hoy = f.getTime()===HOY.getTime();
+      dias += '<i class="'+(hoy?'hoy':(g===0||g===6?'we':''))+'" style="flex:0 0 '+PPD[zoom]+'px">'
+            + f.getDate()+'</i>';
+    }
+  } else if (zoom === 1){
+    for (let i=0; i<NDIAS; i+=7){
+      const f = new Date(T0.getTime()+i*MS);
+      dias += '<i style="flex:0 0 '+(7*PPD[zoom])+'px;border-left:1px solid var(--line)">'+f.getDate()+'</i>';
+    }
+  }
+  return '<div class="hd"><div class="pad"></div><div class="cols" style="width:'+W+'px">'
+       + '<div class="hmes">'+meses+'</div>'
+       + (dias ? '<div class="hdia">'+dias+'</div>' : '')
+       + '</div></div>';
+}
 
-  let h = '<div class="hd"><div class="pad"></div><div class="trk">'
-    + meses.map(function(f,i){
-        const nx = meses[i+1] || T1;
-        const a = Math.max(f,T0), b = Math.min(nx,T1);
-        return '<div class="mon" style="flex:0 0 ' + (b-a)/SPAN*100 + '%">'
-             + MES[f.getMonth()] + (f.getMonth()===0 ? " '27" : '') + '</div>';
-      }).join('')
-    + '</div></div>';
+function fondo(){
+  const p = PPD[zoom], semana = 7*p;
+  // A 3 px por dia las franjas de fin de semana no informan, solo hacen ruido.
+  if (zoom === 2) return 'none';
+  // La trama arranca en lunes: sabado y domingo son los dias 5 y 6 de cada ciclo.
+  let bg = 'repeating-linear-gradient(90deg,transparent 0 '+(5*p)+'px,var(--wknd) '+(5*p)+'px '+semana+'px)';
+  bg += zoom === 0
+    ? ',repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px '+p+'px)'
+    : ',repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px '+semana+'px)';
+  return bg;
+}
 
+function render(){
+  const W = NDIAS * PPD[zoom], BG = fondo();
+  const est = 'style="width:'+W+'px;background-image:'+BG+'"';
+  const bandas = bloqueos.map(b =>
+      '<i class="blk" style="left:'+x(b.bi)+'px;width:'+Math.max(xf(b.bf)-x(b.bi),2)+'px" title="'+b.motivo+'"></i>'
+    ).join('') + '<i class="today" style="left:'+x(HOY)+'px"></i>';
+
+  let h = cabecera();
   fases.forEach(function(fn){
-    const ts = tareas.filter(t => t.fase===fn && vis(t));
+    const ts = tareas.filter(t => t.fase===fn);
     if (!ts.length) return;
-    h += '<div class="phase"><div title="'+fn+'">'+cortoFase(fn)+'</div></div>';
+    h += '<div class="phase"><b title="'+fn+'">'+cortoFase(fn)+'</b><div class="trk" '+est+'></div></div>';
     ts.forEach(function(t){
-      const a = Math.max(t.di,T0), b = Math.min(t.df,T1);
-      const l = pos(a), w = Math.max(pos(b)-l, .3);
+      const l = x(t.di), w = Math.max(xf(t.df)-l, 3);
       const meta = encodeURIComponent(JSON.stringify(
         {n:t.nombre,i:t.inicio,f:t.fin,r:t.responsable,v:t.revisor,c:t.critica,e:t.entregable,x:t.descripcion}));
       h += '<div class="row" data-per="'+t.responsable+'" data-crit="'+t.critica+'">'
         + '<div class="name"><span class="chip">'+t.iniciales+'</span>'
         + '<span class="txt" title="'+t.nombre+'">'+corto(t.nombre)+'</span></div>'
-        + '<div class="trk">'+lineas+'<div class="bar'+(t.critica?' crit':'')+(esCorr(t)?' corr':'')+'" '
-        + 'style="left:'+l+'%;width:'+w+'%" data-t="'+meta+'"></div></div></div>';
+        + '<div class="trk" '+est+'>'+bandas
+        + '<div class="bar'+(t.critica?' crit':'')+(esCorr(t)?' corr':'')+'" '
+        + 'style="left:'+l+'px;width:'+w+'px" data-t="'+meta+'"></div></div></div>';
     });
   });
 
-  h += '<div class="mstrip"><div class="pad">Hitos</div><div class="trk">'+lineas
-    + hitos.filter(x => x.dd>=T0 && x.dd<=T1).map(function(x){
-        const soft = x.confirmado === false || /confirmar|probablemente/i.test(x.nombre+(x.detalle||''));
-        return '<i class="ms'+(soft?' soft':'')+'" style="left:'+pos(x.dd)+'%" data-t="'
-          + encodeURIComponent(JSON.stringify({n:x.nombre,i:x.fecha,hito:1,e:x.detalle||''}))+'"></i>';
+  h += '<div class="mstrip"><div class="pad">Hitos</div><div class="trk" '+est+'>'+bandas
+    + hitos.map(function(v){
+        const soft = v.confirmado === false || /confirmar|probablemente/i.test(v.nombre+(v.detalle||''));
+        return '<i class="ms'+(soft?' soft':'')+'" style="left:'+(x(v.dd)+PPD[zoom]/2)+'px" data-t="'
+          + encodeURIComponent(JSON.stringify({n:v.nombre,i:v.fecha,hito:1,e:v.detalle||''}))+'"></i>';
       }).join('')
     + '</div></div>';
 
   document.getElementById('grid').innerHTML = h;
+  document.getElementById('lg-finde').style.display = zoom === 2 ? 'none' : '';
   aplica();
+}
+
+function aHoy(suave){
+  const s = document.getElementById('scroll');
+  const nomb = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nomb'));
+  const destino = Math.max(x(HOY) - (s.clientWidth - nomb) * 0.18, 0);
+  s.scrollTo({left: destino, behavior: suave ? 'smooth' : 'auto'});
 }
 
 (function(){
@@ -293,7 +357,7 @@ function aplica(){
   document.querySelectorAll('.row,.item').forEach(function(el){
     const okP = !fPer || el.dataset.per===fPer || el.dataset.per==='TODOS';
     const okC = !fCrit || el.dataset.crit==='true';
-    el.style.opacity = (okP && okC) ? '1' : '.15';
+    el.style.opacity = (okP && okC) ? '1' : '.18';
   });
   document.getElementById('f-todo').setAttribute('aria-pressed', !fPer);
   document.querySelectorAll('#f-per button').forEach(b => b.setAttribute('aria-pressed', b.dataset.p===fPer));
@@ -308,13 +372,30 @@ document.getElementById('theme').onclick = function(){
   const dark = document.documentElement.getAttribute('data-theme')==='dark';
   document.documentElement.setAttribute('data-theme', dark?'light':'dark');
 };
-document.querySelectorAll('#rango button').forEach(function(b){
+document.getElementById('ir-hoy').onclick = function(){ aHoy(true); };
+document.querySelectorAll('#zoom button[data-z]').forEach(function(b){
   b.onclick = function(){
-    rango = +b.dataset.r;
-    document.querySelectorAll('#rango button').forEach(x => x.setAttribute('aria-pressed', x===b));
+    const s = document.getElementById('scroll');
+    const nomb = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nomb'));
+    const centro = (s.scrollLeft + (s.clientWidth - nomb)/2) / PPD[zoom];   // día que hay en el centro
+    zoom = +b.dataset.z;
+    document.querySelectorAll('#zoom button[data-z]').forEach(v => v.setAttribute('aria-pressed', v===b));
     render();
+    s.scrollLeft = Math.max(centro*PPD[zoom] - (s.clientWidth - nomb)/2, 0);  // mantener el punto de vista
   };
 });
+
+/* arrastrar para desplazar */
+(function(){
+  const s = document.getElementById('scroll');
+  let abajo = false, x0 = 0, s0 = 0;
+  s.addEventListener('pointerdown', e => {
+    if (e.target.closest('.name')) return;
+    abajo = true; x0 = e.clientX; s0 = s.scrollLeft; s.style.cursor = 'grabbing';
+  });
+  addEventListener('pointerup', () => { abajo = false; s.style.cursor = ''; });
+  addEventListener('pointermove', e => { if (abajo) s.scrollLeft = s0 - (e.clientX - x0); });
+})();
 
 const tip = document.getElementById('tip');
 document.addEventListener('mouseover', function(e){
@@ -338,6 +419,7 @@ document.addEventListener('mousemove', function(e){
 document.addEventListener('mouseout', function(e){ if (e.target.closest('[data-t]')) tip.style.opacity='0'; });
 
 render();
+aHoy(false);
 </script>
 </body>
 </html>

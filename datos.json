@@ -146,7 +146,7 @@
    "revisor": "Raul O.",
    "critica": false,
    "tipo": "trabajo",
-   "entregable": "Word sin ningun resto del grupo 16 ni de la plantilla, con los 4 índices regenerados",
+   "entregable": "Word sin ningún resto del grupo 16 ni de la plantilla, con los 4 índices regenerados",
    "apartado": ""
   },
   {
@@ -348,7 +348,7 @@
    "id": "1.17",
    "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
    "nombre": "Montaje del Gantt v1 en Excel",
-   "descripcion": "Construir el diagrama copiando el formato del ejemplo que el profesor dejo en el Word: dos bloques semestrales, semanas numeradas con su rango de fechas debajo, una fila por tarea, iniciales de los 6 en cada celda, celdas de control y de correcciones en granate, y festivos y huecos sin tutoria pintados. Días utiles reales: 23, 28 y 29 de septiembre.",
+   "descripcion": "Construir el diagrama copiando el formato del ejemplo que el profesor dejo en el Word: dos bloques semestrales, semanas numeradas con su rango de fechas debajo, una fila por tarea, iniciales de los 6 en cada celda, celdas de control y de correcciones en granate, y festivos y huecos sin tutoría pintados. Días utiles reales: 23, 28 y 29 de septiembre.",
    "inicio": "23/09/2026",
    "fin": "29/09/2026",
    "responsable": "Alex R.",
@@ -482,7 +482,7 @@
   {
    "id": "2.5",
    "fase": "FASE 2 — Comprensión del mecanismo y cinemática de la posición de estudio",
-   "nombre": "Punto de control interno a mitad del hueco sin tutoria",
+   "nombre": "Punto de control interno a mitad del hueco sin tutoría",
    "descripcion": "Entre el 09/10 y el 28/10 el G1 no tiene ninguna sesión: casi tres semanas de trabajo autonomo. Reunión larga el viernes 16/10 para verificar avance real de las seis lineas abiertas (correcciones, escalado x10, GDL, posiciones extremas, cinemática a mano, presupuesto) y redistribuir si alguien va atascado, porque hasta el 29/10 no hay a quien preguntar.",
    "inicio": "16/10/2026",
    "fin": "16/10/2026",
@@ -498,7 +498,7 @@
    "id": "2.6",
    "fase": "FASE 2 — Comprensión del mecanismo y cinemática de la posición de estudio",
    "nombre": "Taller interno de PAM para los 6",
-   "descripcion": "Ninguno de los seis ha usado PAM nunca y el plan lo daba por sabido. Tres mananas de formacion guiada: interfaz, definir elementos y pares, imponer el movimiento de entrada, lanzar una simulación y exportar resultados. Sobre un mecanismo de prueba sencillo, no sobre el nuestro. Se aprovecha el hueco sin tutoria del 09/10 al 28/10.",
+   "descripcion": "Ninguno de los seis ha usado PAM nunca y el plan lo daba por sabido. Tres mananas de formacion guiada: interfaz, definir elementos y pares, imponer el movimiento de entrada, lanzar una simulación y exportar resultados. Sobre un mecanismo de prueba sencillo, no sobre el nuestro. Se aprovecha el hueco sin tutoría del 09/10 al 28/10.",
    "inicio": "19/10/2026",
    "fin": "21/10/2026",
    "responsable": "Marc B.",
@@ -738,7 +738,7 @@
    "id": "3.8",
    "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
    "nombre": "HITO: interferencias y colisiones en una vuelta completa",
-   "descripcion": "Barrer una vuelta entera de manivela buscando interferencias estaticas y colisiones dinamicas. La guia lo exige literalmente antes de hacer planos: tras haber verificado que sus dimensiones son las adecuadas, que es posible el ensamblaje y que no hay colisiones o interferencias entre piezas. Es PUERTA OBLIGATORIA: ningun plano de pieza arranca hasta que esta barra cierra.",
+   "descripcion": "Barrer una vuelta entera de manivela buscando interferencias estaticas y colisiones dinamicas. La guia lo exige literalmente antes de hacer planos: tras haber verificado que sus dimensiones son las adecuadas, que es posible el ensamblaje y que no hay colisiones o interferencias entre piezas. Es PUERTA OBLIGATORIA: ningún plano de pieza arranca hasta que esta barra cierra.",
    "inicio": "25/11/2026",
    "fin": "26/11/2026",
    "responsable": "Raul O.",
@@ -1653,7 +1653,7 @@
    "id": "7.6",
    "fase": "FASE 7 — Redacción del informe, vídeo explicativo y entrega final",
    "nombre": "Guion del vídeo explicativo de 20 minutos",
-   "descripcion": "La Guia pide un vídeo de unos 20 minutos en el que TODOS los componentes describan su propio trabajo, y es un entregable distinto de la presentación que no tiene fila en ningun calendario del profesor. Guion con seis bloques de unos 3 minutos, que cuenta cada uno de su parte, y lista de planos a grabar (pantalla de PAM, pantalla de SolidWorks, la maqueta en movimiento). Es coordinacion pura y la lleva Alex, el único libre esa ventana mientras los otros cinco estan con críticas de fuerzas o con la maqueta.",
+   "descripcion": "La Guia pide un vídeo de unos 20 minutos en el que TODOS los componentes describan su propio trabajo, y es un entregable distinto de la presentación que no tiene fila en ningún calendario del profesor. Guion con seis bloques de unos 3 minutos, que cuenta cada uno de su parte, y lista de planos a grabar (pantalla de PAM, pantalla de SolidWorks, la maqueta en movimiento). Es coordinacion pura y la lleva Alex, el único libre esa ventana mientras los otros cinco estan con críticas de fuerzas o con la maqueta.",
    "inicio": "12/04/2027",
    "fin": "16/04/2027",
    "responsable": "Alex R.",
@@ -1788,7 +1788,7 @@
    "id": "7.15",
    "fase": "FASE 7 — Redacción del informe, vídeo explicativo y entrega final",
    "nombre": "HITO de congelacion real: informe, vídeo y presentación cerrados",
-   "descripcion": "Hito de congelacion el 03/05 y no el 30/04, porque el 30/04 es el día en que terminan la maquetacion, el vídeo y el PDF de la presentación, y un hito no puede declarar cerrado lo que se cierra ese mismo día. A partir de aqui nadie toca ningun archivo: lo que quede mal se arrastra a la entrega.",
+   "descripcion": "Hito de congelacion el 03/05 y no el 30/04, porque el 30/04 es el día en que terminan la maquetacion, el vídeo y el PDF de la presentación, y un hito no puede declarar cerrado lo que se cierra ese mismo día. A partir de aqui nadie toca ningún archivo: lo que quede mal se arrastra a la entrega.",
    "inicio": "03/05/2027",
    "fin": "03/05/2027",
    "responsable": "TODOS",
@@ -2022,7 +2022,7 @@
   },
   {
    "fecha": "16/10/2026",
-   "nombre": "Punto de control interno del hueco sin tutoria",
+   "nombre": "Punto de control interno del hueco sin tutoría",
    "detalle": "Reunión larga a mitad de las tres semanas sin sesión; se publica el Gantt v2 con lo que dijo el profesor",
    "confirmado": true
   },
@@ -2035,7 +2035,7 @@
   {
    "fecha": "26/11/2026",
    "nombre": "Puerta obligatoria: cero interferencias en una vuelta completa",
-   "detalle": "Requisito literal de la guia antes de hacer planos; hasta que no cierra, no arranca ningun plano de pieza",
+   "detalle": "Requisito literal de la guia antes de hacer planos; hasta que no cierra, no arranca ningún plano de pieza",
    "confirmado": true
   },
   {
@@ -2107,7 +2107,7 @@
   {
    "fecha": "03/05/2027",
    "nombre": "Congelacion: informe, vídeo y presentación cerrados",
-   "detalle": "Nadie toca ningun archivo; lo que quede mal se arrastra a la entrega",
+   "detalle": "Nadie toca ningún archivo; lo que quede mal se arrastra a la entrega",
    "confirmado": true
   },
   {
@@ -2137,7 +2137,7 @@
   {
    "inicio": "09/10/2026",
    "fin": "28/10/2026",
-   "motivo": "Hueco sin tutoria: el G1 no tiene ninguna sesión con el profesor"
+   "motivo": "Hueco sin tutoría: el G1 no tiene ninguna sesión con el profesor"
   },
   {
    "inicio": "07/12/2026",
@@ -2147,17 +2147,17 @@
   {
    "inicio": "19/12/2026",
    "fin": "31/01/2027",
-   "motivo": "Navidad, examenes y vacaciones: no se planifica trabajo"
+   "motivo": "Navidad, exámenes y vacaciones: no se planifica trabajo"
   },
   {
    "inicio": "01/03/2027",
    "fin": "01/03/2027",
-   "motivo": "Student Day (candidata 1, POR CONFIRMAR): bloqueado por precaucion"
+   "motivo": "Student Day (candidata 1, POR CONFIRMAR): bloqueado por precaución"
   },
   {
    "inicio": "16/03/2027",
    "fin": "16/03/2027",
-   "motivo": "Student Day (candidata 2, POR CONFIRMAR): bloqueado por precaucion"
+   "motivo": "Student Day (candidata 2, POR CONFIRMAR): bloqueado por precaución"
   },
   {
    "inicio": "22/03/2027",
@@ -2167,7 +2167,7 @@
   {
    "inicio": "19/02/2027",
    "fin": "08/04/2027",
-   "motivo": "Siete semanas sin tutoria del G1 (fabricación de la maqueta y cinemática)"
+   "motivo": "Siete semanas sin tutoría del G1 (fabricación de la maqueta y cinemática)"
   },
   {
    "inicio": "23/04/2027",
