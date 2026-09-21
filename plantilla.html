@@ -86,6 +86,7 @@ button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-co
   background:var(--sunken);border:1px solid var(--line-2);border-radius:3px;padding:2px 4px;line-height:1}
 .row:hover .chip{background:var(--card)}
 .gl{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.blk{position:absolute;top:0;bottom:0;background:var(--sunken);z-index:0}
 .bar{position:absolute;top:50%;transform:translateY(-50%);height:10px;border-radius:4px;background:var(--bar);min-width:4px}
 .bar.crit{background:var(--crit)}
 .bar.corr{background:transparent;border:1.5px solid var(--bar)}
@@ -161,6 +162,7 @@ footer p{margin:5px 0}
   <span><i class="sw o"></i> Correcciones</span>
   <span><i class="sw d"></i> Hito</span>
   <span style="color:var(--accent)">│ Hoy</span>
+  <span><i class="sw" style="background:var(--sunken);border:1px solid var(--line-2)"></i> Festivo / sin sesión</span>
 </div>
 
 <div class="chart"><div class="scroll"><div class="grid" id="grid"></div></div></div>
@@ -179,7 +181,7 @@ const HOY = new Date(2026,8,21);
 const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const d = s => { const [a,b,c] = s.split('/').map(Number); return new Date(c,b-1,a); };
 const fmt = x => x.toLocaleDateString('es-ES',{day:'numeric',month:'short'});
-const corto = n => { const x = n.split(/[(:;]| — | - /)[0].trim().replace(/[,.]$/,'');
+const corto = n => { const x = n.split(/\s*[(;]| — /)[0].trim().replace(/[,.]$/,'');
   return x.length > 56 ? x.slice(0,54).replace(/\s\S*$/,'')+'…' : x; };
 const cortoFase = n => n.replace(/^FASE \d+ — /,'').split('(')[0].trim();
 const esCorr = t => /correc/i.test(t.nombre);
@@ -187,6 +189,7 @@ const esCorr = t => /correc/i.test(t.nombre);
 const tareas = DATOS.tareas.map(t => ({...t, di:d(t.inicio), df:d(t.fin)}));
 const hitos  = DATOS.hitos.map(h => ({...h, dd:d(h.fecha)}));
 const fases  = DATOS.fases.map(f => f.nombre);
+const bloqueos = (DATOS.bloqueos||[]).map(b => ({...b, bi:d(b.inicio), bf:d(b.fin)}));
 
 const RANGOS = [
   [new Date(2026,8,14), new Date(2027,4,20)],
@@ -221,7 +224,11 @@ function render(){
     if (f > T1) break;
     meses.push(f);
   }
-  const lineas = meses.map(f => pos(f) > 0 ? '<i class="gl" style="left:'+pos(f)+'%"></i>' : '').join('')
+  const bandas = bloqueos.filter(b => b.bf>=T0 && b.bi<=T1).map(function(b){
+    const a = Math.max(b.bi,T0), z = Math.min(b.bf,T1);
+    return '<i class="blk" style="left:'+pos(a)+'%;width:'+Math.max(pos(z)-pos(a),.25)+'%" title="'+b.motivo+'"></i>';
+  }).join('');
+  const lineas = bandas + meses.map(f => pos(f) > 0 ? '<i class="gl" style="left:'+pos(f)+'%"></i>' : '').join('')
     + (HOY>=T0 && HOY<=T1 ? '<i class="today" style="left:'+pos(HOY)+'%"></i>' : '');
 
   let h = '<div class="hd"><div class="pad"></div><div class="trk">'
@@ -241,7 +248,7 @@ function render(){
       const a = Math.max(t.di,T0), b = Math.min(t.df,T1);
       const l = pos(a), w = Math.max(pos(b)-l, .3);
       const meta = encodeURIComponent(JSON.stringify(
-        {n:t.nombre,i:t.inicio,f:t.fin,r:t.responsable,v:t.revisor,c:t.critica,e:t.entregable}));
+        {n:t.nombre,i:t.inicio,f:t.fin,r:t.responsable,v:t.revisor,c:t.critica,e:t.entregable,x:t.descripcion}));
       h += '<div class="row" data-per="'+t.responsable+'" data-crit="'+t.critica+'">'
         + '<div class="name"><span class="chip">'+t.iniciales+'</span>'
         + '<span class="txt" title="'+t.nombre+'">'+corto(t.nombre)+'</span></div>'
@@ -252,7 +259,7 @@ function render(){
 
   h += '<div class="mstrip"><div class="pad">Hitos</div><div class="trk">'+lineas
     + hitos.filter(x => x.dd>=T0 && x.dd<=T1).map(function(x){
-        const soft = /confirmar|probablemente/i.test(x.nombre + (x.detalle||''));
+        const soft = x.confirmado === false || /confirmar|probablemente/i.test(x.nombre+(x.detalle||''));
         return '<i class="ms'+(soft?' soft':'')+'" style="left:'+pos(x.dd)+'%" data-t="'
           + encodeURIComponent(JSON.stringify({n:x.nombre,i:x.fecha,hito:1,e:x.detalle||''}))+'"></i>';
       }).join('')
@@ -317,6 +324,7 @@ document.addEventListener('mouseover', function(e){
     ? '<b>'+o.n+'</b><div class="m">'+o.i+'</div>' + (o.e?'<div class="m">'+o.e+'</div>':'')
     : '<b>'+o.n+'</b><div class="m">'+o.i+' → '+o.f+'</div><div class="m">'+o.r
       + (o.v?' · revisa '+o.v:'')+'</div>'
+      + (o.x?'<div class="m">'+o.x+'</div>':'')
       + (o.e?'<div class="m">Entregable: '+o.e+'</div>':'')
       + (o.c?'<div class="m">Camino crítico</div>':'');
   tip.style.opacity = '1';
