@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan de Trabajo G1</title>
+<meta name="description" content="Diagrama de Gantt del Proyecto Integrado 2º GETI — Grupo 1, curso 26/27.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --surface:#fcfcfb; --card:#fff; --sunken:#f4f3f0;
+  --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#8b8a85;
+  --line:#e6e4df; --line-2:#d3d0c9;
+  --bar:#2a78d6; --crit:#e34948; --crit-soft:#f9dedd; --accent:#0d366b;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --surface:#1a1a19; --card:#232322; --sunken:#151514;
+  --ink:#fff; --ink-2:#c3c2b7; --ink-3:#8b8a85;
+  --line:#333331; --line-2:#44443f;
+  --bar:#3987e5; --crit:#e66767; --crit-soft:#5c2b2b; --accent:#86b6ef;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --surface:#1a1a19; --card:#232322; --sunken:#151514;
+  --ink:#fff; --ink-2:#c3c2b7; --ink-3:#8b8a85;
+  --line:#333331; --line-2:#44443f;
+  --bar:#3987e5; --crit:#e66767; --crit-soft:#5c2b2b; --accent:#86b6ef;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--surface);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px 80px}
+
+header{padding:44px 0 26px;border-bottom:1px solid var(--line);margin-bottom:26px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.08;font-weight:700;letter-spacing:-.024em;margin:0 0 10px}
+.sub{color:var(--ink-2);margin:0;max-width:62ch}
+.cards{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 20px;flex:1 1 170px}
+.kpi .h{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+.kpi .n{font-size:32px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.kpi .l{font-size:12.5px;color:var(--ink-2);margin-top:5px;line-height:1.35}
+.kpi.hot .n{color:var(--crit)}
+
+.bar-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.lbl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-right:2px}
+button{font:inherit;font-size:13px;font-weight:500;cursor:pointer;background:var(--card);color:var(--ink-2);
+  border:1px solid var(--line);border-radius:999px;padding:7px 14px;min-height:34px;transition:.12s}
+button:hover{border-color:var(--line-2);color:var(--ink)}
+button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.spacer{flex:1}
+
+.legend{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--ink-2);margin:0 0 16px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:22px;height:8px;border-radius:4px;display:inline-block}
+.sw.b{background:var(--bar)} .sw.c{background:var(--crit)}
+.sw.o{background:transparent;border:1.5px solid var(--bar)}
+.sw.d{width:8px;height:8px;transform:rotate(45deg);border-radius:1px;background:var(--ink)}
+
+.chart{border:1px solid var(--line);border-radius:10px;background:var(--card);overflow:hidden}
+.scroll{overflow-x:auto}
+.grid{min-width:880px}
+.hd{display:flex;position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.pad{flex:0 0 300px;min-width:0;border-right:1px solid var(--line)}
+.trk{flex:1;min-width:0;position:relative}
+.hd .trk{display:flex}
+.mon{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  padding:11px 0 10px 8px;border-left:1px solid var(--line);overflow:hidden;white-space:nowrap}
+.mon:first-child{border-left:0}
+
+.phase{display:flex;background:var(--sunken);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.phase div{padding:9px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+.row{display:flex;border-bottom:1px solid var(--line);min-height:31px}
+.row:last-of-type{border-bottom:0}
+.row:hover{background:var(--sunken)}
+.row .name{flex:0 0 300px;min-width:0;overflow:hidden;padding:6px 12px 6px 14px;font-size:13px;color:var(--ink-2);
+  display:flex;align-items:center;gap:8px;border-right:1px solid var(--line)}
+.txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip{flex:0 0 auto;font-size:9.5px;font-weight:700;letter-spacing:.04em;color:var(--ink-2);
+  background:var(--sunken);border:1px solid var(--line-2);border-radius:3px;padding:2px 4px;line-height:1}
+.row:hover .chip{background:var(--card)}
+.gl{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.bar{position:absolute;top:50%;transform:translateY(-50%);height:10px;border-radius:4px;background:var(--bar);min-width:4px}
+.bar.crit{background:var(--crit)}
+.bar.corr{background:transparent;border:1.5px solid var(--bar)}
+.bar.crit.corr{border-color:var(--crit)}
+.today{position:absolute;top:0;bottom:0;width:1.5px;background:var(--accent);z-index:4}
+.mstrip{display:flex;border-top:1px solid var(--line-2);background:var(--card)}
+.mstrip .pad{padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+.mstrip .trk{min-height:40px}
+.ms{position:absolute;top:14px;width:8px;height:8px;background:var(--ink);transform:rotate(45deg) translateX(-50%);
+  transform-origin:left;border-radius:1px}
+.ms.soft{background:transparent;border:1.5px solid var(--ink-3)}
+
+#tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--ink);
+  color:var(--surface);border-radius:7px;padding:9px 12px;font-size:12.5px;line-height:1.45;max-width:300px;
+  box-shadow:0 8px 28px rgba(0,0,0,.22)}
+#tip b{font-weight:600} #tip .m{opacity:.72;font-size:11.5px}
+
+.list{display:none}
+.lphase{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  margin:24px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+.item{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--bar);border-radius:9px;
+  padding:12px 15px;margin-bottom:8px}
+.item.crit{border-left-color:var(--crit)}
+.item h3{margin:0 0 5px;font-size:14.5px;font-weight:600;line-height:1.35}
+.item .meta{font-size:12.5px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px 12px}
+.tag{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--crit);
+  background:var(--crit-soft);border-radius:3px;padding:2px 6px}
+
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
+footer p{margin:5px 0}
+
+@media (max-width:780px){
+  .chart,.legend,#rango{display:none}
+  .list{display:block}
+  header{padding-top:28px}
+  .kpi{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Proyecto Integrado · 2º GETI · IQS · Curso 26/27</p>
+  <h1>Plan de trabajo — Grupo 1</h1>
+  <p class="sub">Mecanismo plano de palancas de dos grupos de Assur. Cronograma de ejecución desde el arranque hasta la defensa ante tribunal.</p>
+  <div class="cards">
+    <div class="kpi hot"><div class="h">Próximo hito</div><div class="n" id="k1">—</div><div class="l" id="k1l"></div></div>
+    <div class="kpi"><div class="h">Entrega final</div><div class="n" id="k2">—</div><div class="l">5 de mayo de 2027</div></div>
+    <div class="kpi"><div class="h">Tareas</div><div class="n" id="k3">—</div><div class="l" id="k3l"></div></div>
+    <div class="kpi"><div class="h">Equipo</div><div class="n">6</div><div class="l">Alex R. · Raul O. · Jan D. · Victor G. · Marc B. · Ignasi S.</div></div>
+  </div>
+</header>
+
+<div class="bar-controls">
+  <span class="lbl">Quién</span>
+  <button id="f-todo" aria-pressed="true">Todos</button>
+  <span id="f-per"></span>
+  <span class="spacer"></span>
+  <button id="crit" aria-pressed="false">Solo crítico</button>
+  <button id="theme">Tema</button>
+</div>
+<div class="bar-controls" id="rango">
+  <span class="lbl">Cuándo</span>
+  <button data-r="0" aria-pressed="false">Curso completo</button>
+  <button data-r="1" aria-pressed="true">1er cuatrimestre</button>
+  <button data-r="2" aria-pressed="false">2º cuatrimestre</button>
+</div>
+
+<div class="legend">
+  <span><i class="sw b"></i> Tarea</span>
+  <span><i class="sw c"></i> Camino crítico</span>
+  <span><i class="sw o"></i> Correcciones</span>
+  <span><i class="sw d"></i> Hito</span>
+  <span style="color:var(--accent)">│ Hoy</span>
+</div>
+
+<div class="chart"><div class="scroll"><div class="grid" id="grid"></div></div></div>
+<div class="list" id="list"></div>
+
+<footer>
+  <p id="pie"></p>
+  <p>Los hitos con el rombo hueco tienen la fecha pendiente de confirmar con el profesor.</p>
+</footer>
+</div>
+<div id="tip"></div>
+
+<script>
+const DATOS = /*__DATOS__*/{}/*__FIN__*/;
+const HOY = new Date(2026,8,21);
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const d = s => { const [a,b,c] = s.split('/').map(Number); return new Date(c,b-1,a); };
+const fmt = x => x.toLocaleDateString('es-ES',{day:'numeric',month:'short'});
+const corto = n => { const x = n.split(/[(:;]| — | - /)[0].trim().replace(/[,.]$/,'');
+  return x.length > 56 ? x.slice(0,54).replace(/\s\S*$/,'')+'…' : x; };
+const cortoFase = n => n.replace(/^FASE \d+ — /,'').split('(')[0].trim();
+const esCorr = t => /correc/i.test(t.nombre);
+
+const tareas = DATOS.tareas.map(t => ({...t, di:d(t.inicio), df:d(t.fin)}));
+const hitos  = DATOS.hitos.map(h => ({...h, dd:d(h.fecha)}));
+const fases  = DATOS.fases.map(f => f.nombre);
+
+const RANGOS = [
+  [new Date(2026,8,14), new Date(2027,4,20)],
+  [new Date(2026,8,14), new Date(2026,11,23)],
+  [new Date(2027,1,1),  new Date(2027,4,20)],
+];
+let rango = 1, fPer = null, fCrit = false;
+
+(function(){
+  const p = hitos.filter(h => h.dd >= HOY).sort((a,b)=>a.dd-b.dd)[0];
+  if (p) {
+    const n = Math.round((p.dd-HOY)/864e5);
+    document.getElementById('k1').textContent = n + (n===1?' día':' días');
+    document.getElementById('k1l').textContent = corto(p.nombre) + ' · ' + fmt(p.dd);
+  }
+  document.getElementById('k2').textContent = Math.round((new Date(2027,4,5)-HOY)/864e5) + ' días';
+  document.getElementById('k3').textContent = tareas.length;
+  document.getElementById('k3l').textContent = tareas.filter(t=>t.critica).length + ' en el camino crítico';
+  document.getElementById('pie').textContent =
+    tareas.length + ' tareas · ' + fases.length + ' fases · ' + hitos.length + ' hitos · del 21 sept 2026 al 13 may 2027';
+})();
+
+function render(){
+  const T0 = RANGOS[rango][0], T1 = RANGOS[rango][1], SPAN = T1-T0;
+  const pos = x => (x-T0)/SPAN*100;
+  const vis = t => t.df >= T0 && t.di <= T1;
+
+  const meses = [];
+  for (let y=T0.getFullYear(), m=T0.getMonth();;m++){
+    if (m>11){ m=0; y++; }
+    const f = new Date(y,m,1);
+    if (f > T1) break;
+    meses.push(f);
+  }
+  const lineas = meses.map(f => pos(f) > 0 ? '<i class="gl" style="left:'+pos(f)+'%"></i>' : '').join('')
+    + (HOY>=T0 && HOY<=T1 ? '<i class="today" style="left:'+pos(HOY)+'%"></i>' : '');
+
+  let h = '<div class="hd"><div class="pad"></div><div class="trk">'
+    + meses.map(function(f,i){
+        const nx = meses[i+1] || T1;
+        const a = Math.max(f,T0), b = Math.min(nx,T1);
+        return '<div class="mon" style="flex:0 0 ' + (b-a)/SPAN*100 + '%">'
+             + MES[f.getMonth()] + (f.getMonth()===0 ? " '27" : '') + '</div>';
+      }).join('')
+    + '</div></div>';
+
+  fases.forEach(function(fn){
+    const ts = tareas.filter(t => t.fase===fn && vis(t));
+    if (!ts.length) return;
+    h += '<div class="phase"><div title="'+fn+'">'+cortoFase(fn)+'</div></div>';
+    ts.forEach(function(t){
+      const a = Math.max(t.di,T0), b = Math.min(t.df,T1);
+      const l = pos(a), w = Math.max(pos(b)-l, .3);
+      const meta = encodeURIComponent(JSON.stringify(
+        {n:t.nombre,i:t.inicio,f:t.fin,r:t.responsable,v:t.revisor,c:t.critica,e:t.entregable}));
+      h += '<div class="row" data-per="'+t.responsable+'" data-crit="'+t.critica+'">'
+        + '<div class="name"><span class="chip">'+t.iniciales+'</span>'
+        + '<span class="txt" title="'+t.nombre+'">'+corto(t.nombre)+'</span></div>'
+        + '<div class="trk">'+lineas+'<div class="bar'+(t.critica?' crit':'')+(esCorr(t)?' corr':'')+'" '
+        + 'style="left:'+l+'%;width:'+w+'%" data-t="'+meta+'"></div></div></div>';
+    });
+  });
+
+  h += '<div class="mstrip"><div class="pad">Hitos</div><div class="trk">'+lineas
+    + hitos.filter(x => x.dd>=T0 && x.dd<=T1).map(function(x){
+        const soft = /confirmar|probablemente/i.test(x.nombre + (x.detalle||''));
+        return '<i class="ms'+(soft?' soft':'')+'" style="left:'+pos(x.dd)+'%" data-t="'
+          + encodeURIComponent(JSON.stringify({n:x.nombre,i:x.fecha,hito:1,e:x.detalle||''}))+'"></i>';
+      }).join('')
+    + '</div></div>';
+
+  document.getElementById('grid').innerHTML = h;
+  aplica();
+}
+
+(function(){
+  let l = '';
+  fases.forEach(function(fn){
+    const ts = tareas.filter(t => t.fase===fn);
+    if (!ts.length) return;
+    l += '<div class="lphase">'+cortoFase(fn)+'</div>';
+    ts.forEach(function(t){
+      l += '<div class="item'+(t.critica?' crit':'')+'" data-per="'+t.responsable+'" data-crit="'+t.critica+'">'
+        + '<h3>'+corto(t.nombre)+' '+(t.critica?'<span class="tag">crítica</span>':'')+'</h3>'
+        + '<div class="meta"><span><b>'+t.responsable+'</b></span><span>'+fmt(t.di)+' → '+fmt(t.df)+'</span>'
+        + (t.revisor ? '<span>revisa '+t.revisor+'</span>' : '') + '</div></div>';
+    });
+  });
+  document.getElementById('list').innerHTML = l;
+})();
+
+const PERS = [...new Set(tareas.map(t=>t.responsable))].filter(p=>p!=='TODOS').sort();
+document.getElementById('f-per').innerHTML =
+  PERS.map(p => '<button data-p="'+p+'" aria-pressed="false">'+p+'</button>').join(' ');
+
+function aplica(){
+  document.querySelectorAll('.row,.item').forEach(function(el){
+    const okP = !fPer || el.dataset.per===fPer || el.dataset.per==='TODOS';
+    const okC = !fCrit || el.dataset.crit==='true';
+    el.style.opacity = (okP && okC) ? '1' : '.15';
+  });
+  document.getElementById('f-todo').setAttribute('aria-pressed', !fPer);
+  document.querySelectorAll('#f-per button').forEach(b => b.setAttribute('aria-pressed', b.dataset.p===fPer));
+  document.getElementById('crit').setAttribute('aria-pressed', fCrit);
+}
+document.getElementById('f-todo').onclick = function(){ fPer=null; aplica(); };
+document.querySelectorAll('#f-per button').forEach(function(b){
+  b.onclick = function(){ fPer = fPer===b.dataset.p ? null : b.dataset.p; aplica(); };
+});
+document.getElementById('crit').onclick = function(){ fCrit=!fCrit; aplica(); };
+document.getElementById('theme').onclick = function(){
+  const dark = document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme', dark?'light':'dark');
+};
+document.querySelectorAll('#rango button').forEach(function(b){
+  b.onclick = function(){
+    rango = +b.dataset.r;
+    document.querySelectorAll('#rango button').forEach(x => x.setAttribute('aria-pressed', x===b));
+    render();
+  };
+});
+
+const tip = document.getElementById('tip');
+document.addEventListener('mouseover', function(e){
+  const el = e.target.closest('[data-t]'); if (!el) return;
+  const o = JSON.parse(decodeURIComponent(el.dataset.t));
+  tip.innerHTML = o.hito
+    ? '<b>'+o.n+'</b><div class="m">'+o.i+'</div>' + (o.e?'<div class="m">'+o.e+'</div>':'')
+    : '<b>'+o.n+'</b><div class="m">'+o.i+' → '+o.f+'</div><div class="m">'+o.r
+      + (o.v?' · revisa '+o.v:'')+'</div>'
+      + (o.e?'<div class="m">Entregable: '+o.e+'</div>':'')
+      + (o.c?'<div class="m">Camino crítico</div>':'');
+  tip.style.opacity = '1';
+});
+document.addEventListener('mousemove', function(e){
+  if (tip.style.opacity !== '1') return;
+  const r = tip.getBoundingClientRect();
+  tip.style.left = Math.min(e.clientX+14, innerWidth-r.width-10) + 'px';
+  tip.style.top  = Math.max(e.clientY-r.height-12, 8) + 'px';
+});
+document.addEventListener('mouseout', function(e){ if (e.target.closest('[data-t]')) tip.style.opacity='0'; });
+
+render();
+</script>
+</body>
+</html>

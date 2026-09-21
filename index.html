@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan de Trabajo G1</title>
+<meta name="description" content="Diagrama de Gantt del Proyecto Integrado 2º GETI — Grupo 1, curso 26/27.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --surface:#fcfcfb; --card:#fff; --sunken:#f4f3f0;
+  --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#8b8a85;
+  --line:#e6e4df; --line-2:#d3d0c9;
+  --bar:#2a78d6; --crit:#e34948; --crit-soft:#f9dedd; --accent:#0d366b;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --surface:#1a1a19; --card:#232322; --sunken:#151514;
+  --ink:#fff; --ink-2:#c3c2b7; --ink-3:#8b8a85;
+  --line:#333331; --line-2:#44443f;
+  --bar:#3987e5; --crit:#e66767; --crit-soft:#5c2b2b; --accent:#86b6ef;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --surface:#1a1a19; --card:#232322; --sunken:#151514;
+  --ink:#fff; --ink-2:#c3c2b7; --ink-3:#8b8a85;
+  --line:#333331; --line-2:#44443f;
+  --bar:#3987e5; --crit:#e66767; --crit-soft:#5c2b2b; --accent:#86b6ef;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--surface);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px 80px}
+
+header{padding:44px 0 26px;border-bottom:1px solid var(--line);margin-bottom:26px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.08;font-weight:700;letter-spacing:-.024em;margin:0 0 10px}
+.sub{color:var(--ink-2);margin:0;max-width:62ch}
+.cards{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 20px;flex:1 1 170px}
+.kpi .h{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+.kpi .n{font-size:32px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.kpi .l{font-size:12.5px;color:var(--ink-2);margin-top:5px;line-height:1.35}
+.kpi.hot .n{color:var(--crit)}
+
+.bar-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.lbl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-right:2px}
+button{font:inherit;font-size:13px;font-weight:500;cursor:pointer;background:var(--card);color:var(--ink-2);
+  border:1px solid var(--line);border-radius:999px;padding:7px 14px;min-height:34px;transition:.12s}
+button:hover{border-color:var(--line-2);color:var(--ink)}
+button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.spacer{flex:1}
+
+.legend{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--ink-2);margin:0 0 16px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:22px;height:8px;border-radius:4px;display:inline-block}
+.sw.b{background:var(--bar)} .sw.c{background:var(--crit)}
+.sw.o{background:transparent;border:1.5px solid var(--bar)}
+.sw.d{width:8px;height:8px;transform:rotate(45deg);border-radius:1px;background:var(--ink)}
+
+.chart{border:1px solid var(--line);border-radius:10px;background:var(--card);overflow:hidden}
+.scroll{overflow-x:auto}
+.grid{min-width:880px}
+.hd{display:flex;position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.pad{flex:0 0 300px;min-width:0;border-right:1px solid var(--line)}
+.trk{flex:1;min-width:0;position:relative}
+.hd .trk{display:flex}
+.mon{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  padding:11px 0 10px 8px;border-left:1px solid var(--line);overflow:hidden;white-space:nowrap}
+.mon:first-child{border-left:0}
+
+.phase{display:flex;background:var(--sunken);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.phase div{padding:9px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+.row{display:flex;border-bottom:1px solid var(--line);min-height:31px}
+.row:last-of-type{border-bottom:0}
+.row:hover{background:var(--sunken)}
+.row .name{flex:0 0 300px;min-width:0;overflow:hidden;padding:6px 12px 6px 14px;font-size:13px;color:var(--ink-2);
+  display:flex;align-items:center;gap:8px;border-right:1px solid var(--line)}
+.txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip{flex:0 0 auto;font-size:9.5px;font-weight:700;letter-spacing:.04em;color:var(--ink-2);
+  background:var(--sunken);border:1px solid var(--line-2);border-radius:3px;padding:2px 4px;line-height:1}
+.row:hover .chip{background:var(--card)}
+.gl{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
+.bar{position:absolute;top:50%;transform:translateY(-50%);height:10px;border-radius:4px;background:var(--bar);min-width:4px}
+.bar.crit{background:var(--crit)}
+.bar.corr{background:transparent;border:1.5px solid var(--bar)}
+.bar.crit.corr{border-color:var(--crit)}
+.today{position:absolute;top:0;bottom:0;width:1.5px;background:var(--accent);z-index:4}
+.mstrip{display:flex;border-top:1px solid var(--line-2);background:var(--card)}
+.mstrip .pad{padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+.mstrip .trk{min-height:40px}
+.ms{position:absolute;top:14px;width:8px;height:8px;background:var(--ink);transform:rotate(45deg) translateX(-50%);
+  transform-origin:left;border-radius:1px}
+.ms.soft{background:transparent;border:1.5px solid var(--ink-3)}
+
+#tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--ink);
+  color:var(--surface);border-radius:7px;padding:9px 12px;font-size:12.5px;line-height:1.45;max-width:300px;
+  box-shadow:0 8px 28px rgba(0,0,0,.22)}
+#tip b{font-weight:600} #tip .m{opacity:.72;font-size:11.5px}
+
+.list{display:none}
+.lphase{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  margin:24px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+.item{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--bar);border-radius:9px;
+  padding:12px 15px;margin-bottom:8px}
+.item.crit{border-left-color:var(--crit)}
+.item h3{margin:0 0 5px;font-size:14.5px;font-weight:600;line-height:1.35}
+.item .meta{font-size:12.5px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px 12px}
+.tag{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--crit);
+  background:var(--crit-soft);border-radius:3px;padding:2px 6px}
+
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
+footer p{margin:5px 0}
+
+@media (max-width:780px){
+  .chart,.legend,#rango{display:none}
+  .list{display:block}
+  header{padding-top:28px}
+  .kpi{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Proyecto Integrado · 2º GETI · IQS · Curso 26/27</p>
+  <h1>Plan de trabajo — Grupo 1</h1>
+  <p class="sub">Mecanismo plano de palancas de dos grupos de Assur. Cronograma de ejecución desde el arranque hasta la defensa ante tribunal.</p>
+  <div class="cards">
+    <div class="kpi hot"><div class="h">Próximo hito</div><div class="n" id="k1">—</div><div class="l" id="k1l"></div></div>
+    <div class="kpi"><div class="h">Entrega final</div><div class="n" id="k2">—</div><div class="l">5 de mayo de 2027</div></div>
+    <div class="kpi"><div class="h">Tareas</div><div class="n" id="k3">—</div><div class="l" id="k3l"></div></div>
+    <div class="kpi"><div class="h">Equipo</div><div class="n">6</div><div class="l">Alex R. · Raul O. · Jan D. · Victor G. · Marc B. · Ignasi S.</div></div>
+  </div>
+</header>
+
+<div class="bar-controls">
+  <span class="lbl">Quién</span>
+  <button id="f-todo" aria-pressed="true">Todos</button>
+  <span id="f-per"></span>
+  <span class="spacer"></span>
+  <button id="crit" aria-pressed="false">Solo crítico</button>
+  <button id="theme">Tema</button>
+</div>
+<div class="bar-controls" id="rango">
+  <span class="lbl">Cuándo</span>
+  <button data-r="0" aria-pressed="false">Curso completo</button>
+  <button data-r="1" aria-pressed="true">1er cuatrimestre</button>
+  <button data-r="2" aria-pressed="false">2º cuatrimestre</button>
+</div>
+
+<div class="legend">
+  <span><i class="sw b"></i> Tarea</span>
+  <span><i class="sw c"></i> Camino crítico</span>
+  <span><i class="sw o"></i> Correcciones</span>
+  <span><i class="sw d"></i> Hito</span>
+  <span style="color:var(--accent)">│ Hoy</span>
+</div>
+
+<div class="chart"><div class="scroll"><div class="grid" id="grid"></div></div></div>
+<div class="list" id="list"></div>
+
+<footer>
+  <p id="pie"></p>
+  <p>Los hitos con el rombo hueco tienen la fecha pendiente de confirmar con el profesor.</p>
+</footer>
+</div>
+<div id="tip"></div>
+
+<script>
+const DATOS = /*__DATOS__*/{
+ "fases": [
+  {
+   "nombre": "FASE 0 — Gestión continua del proyecto (todo el curso)"
+  },
+  {
+   "nombre": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)"
+  },
+  {
+   "nombre": "FASE 2 — Comprensión del mecanismo y cinemática analítica de la posición de estudio"
+  },
+  {
+   "nombre": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento"
+  },
+  {
+   "nombre": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial"
+  },
+  {
+   "nombre": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta"
+  },
+  {
+   "nombre": "FASE 6 — Dinámica, matriz de fuerzas y montaje de la maqueta"
+  },
+  {
+   "nombre": "FASE 7 — Redacción del informe, vídeo y entrega final"
+  },
+  {
+   "nombre": "FASE 8 — Presentación, ensayo y defensa"
+  }
+ ],
+ "tareas": [
+  {
+   "id": "0.1",
+   "fase": "FASE 0 — Gestión continua del proyecto (todo el curso)",
+   "nombre": "Reunión semanal fija de coordinación (viernes, 30 min), fuera de las sesiones con el profesor: repaso del semáforo y traspaso de paquetes",
+   "inicio": "21/09/2026",
+   "fin": "13/05/2027",
+   "responsable": "TODOS",
+   "iniciales": "ALL",
+   "revisor": "Alex R.",
+   "critica": false,
+   "entregable": "Acta breve de cada reunión en BITACORA.md con asistencia (justifica el criterio 'asistió al 100% de las actividades planificadas' de la rúbrica)"
+  },
+  {
+   "id": "0.2",
+   "fase": "FASE 0 — Gestión continua del proyecto (todo el curso)",
+   "nombre": "Mantenimiento de la bitácora y del reparto de tareas como comentarios dentro de Informe-gr1.docx",
+   "inicio": "21/09/2026",
+   "fin": "13/05/2027",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Ignasi S.",
+   "critica": false,
+   "entregable": "BITACORA.md actualizada y comentarios vivos en el Word etiquetando a @Garcia Granada Andrés"
+  },
+  {
+   "id": "0.3",
+   "fase": "FASE 0 — Gestión continua del proyecto (todo el curso)",
+   "nombre": "Replanificación del Gantt después de cada control (v2 el 07/10, v3 el 21/12, v4 el 22/03), guardando siempre la versión anterior",
+   "inicio": "07/10/2026",
+   "fin": "22/03/2027",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Marc B.",
+   "critica": false,
+   "entregable": "Gantt-G1-v1.xlsx, v2, v3 y v4 conservados (prueba del criterio 'se adaptó a los cambios del grupo')"
+  },
+  {
+   "id": "0.4",
+   "fase": "FASE 0 — Gestión continua del proyecto (todo el curso)",
+   "nombre": "Control de versiones en OneDrive: un solo responsable por archivo CAD, nomenclatura N.M., copia de seguridad semanal y vigilancia de archivos en conflicto",
+   "inicio": "21/09/2026",
+   "fin": "05/05/2027",
+   "responsable": "Raul O.",
+   "iniciales": "RO",
+   "revisor": "Victor G.",
+   "critica": false,
+   "entregable": "Carpeta gr1-2627 sin archivos '-PC-de-...' y copia semanal fechada"
+  },
+  {
+   "id": "1.1",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Volcar el reparto de tareas como comentarios en Informe-gr1.docx (uno por persona) y corregir la portada: 6 integrantes y fecha '18/09/2026' en lugar de '018/09/2026'",
+   "inicio": "21/09/2026",
+   "fin": "22/09/2026",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Ignasi S.",
+   "critica": false,
+   "entregable": "Word con 6 comentarios de asignación nominales y portada corregida"
+  },
+  {
+   "id": "1.2",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Lanzar al profesor las 4 preguntas pendientes como comentarios en el Word (bancada 370x245 vs 300x175; 18 o 19/03; 12 o 13/05; lista oficial de 8 integrantes)",
+   "inicio": "21/09/2026",
+   "fin": "22/09/2026",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Jan D.",
+   "critica": true,
+   "entregable": "4 comentarios etiquetando a @Garcia Granada Andrés, con la pregunta de la bancada marcada como urgente"
+  },
+  {
+   "id": "1.3",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Esquema simplificado del mecanismo con símbolos normalizados ISO 3952, sin cotas (apartado 2.1 del informe), en archivo nuevo 0.esquema-mecanismo.SLDASM",
+   "inicio": "21/09/2026",
+   "fin": "22/09/2026",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Figura del esquema simbólico con los 5 elementos y los pares cinemáticos nombrados y clasificados"
+  },
+  {
+   "id": "1.4",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Croquis acotado en SolidWorks, archivo nuevo y aparte del ensamblaje del profesor (apartado 2.2): longitud de cada barra y posición de los dos apoyos fijos",
+   "inicio": "21/09/2026",
+   "fin": "22/09/2026",
+   "responsable": "Ignasi S.",
+   "iniciales": "IS",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Croquis totalmente definido salvo 1 grado de libertad (ángulo de manivela), con la distancia entre apoyos múltiplo de 25 mm"
+  },
+  {
+   "id": "1.5",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Validación del croquis por el grupo entero en la sesión del 22/09: arrastrar la manivela una vuelta completa sin bloqueos y comprobar que GM = 1",
+   "inicio": "22/09/2026",
+   "fin": "22/09/2026",
+   "responsable": "TODOS",
+   "iniciales": "ALL",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Acta de validación en la bitácora con la tabla de cotas aceptada y la captura de la vuelta completa"
+  },
+  {
+   "id": "1.6",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Dimensionamiento definitivo: cerrar las medidas tras la validación, comprobar que el mecanismo cabe en la bancada y encaja en la malla de agujeros de 25 mm",
+   "inicio": "23/09/2026",
+   "fin": "29/09/2026",
+   "responsable": "Victor G.",
+   "iniciales": "VG",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Tabla de cotas definitiva + croquis acotado final en PDF, listo para 'Revisión Dimensionamiento' del 06/10"
+  },
+  {
+   "id": "1.7",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Bibliografía tema a) Ingeniería Concurrente y Simultánea: etapas solapadas frente a ingeniería secuencial y sus ventajas (apartado 1.5.3)",
+   "inicio": "21/09/2026",
+   "fin": "28/09/2026",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Raul O.",
+   "critica": false,
+   "entregable": "Ficha con 1 libro + 1 artículo en formato UNE 50-104-94 y borrador del apartado 1.5.3"
+  },
+  {
+   "id": "1.8",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Bibliografía tema b) Diagrama de Gantt y organización del trabajo: qué es, cómo se construye, dependencias, hitos y camino crítico (apartado 1.4)",
+   "inicio": "21/09/2026",
+   "fin": "28/09/2026",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "2 referencias citables y el vocabulario (dependencia, hito, camino crítico, holgura) que se usará en la justificación del 1.4"
+  },
+  {
+   "id": "1.9",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Bibliografía tema c) Mecánica Aplicada, 1ª parte: elemento, par cinemático, grado de movilidad, grupo de Assur, síntesis y análisis de mecanismos (apartado 1.5.4)",
+   "inicio": "21/09/2026",
+   "fin": "02/10/2026",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Victor G.",
+   "critica": false,
+   "entregable": "Fichas de 2 libros de teoría de máquinas + borrador de la mitad del apartado 1.5.4"
+  },
+  {
+   "id": "1.10",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Bibliografía tema c) Mecánica Aplicada, 2ª parte: diagrama de sólido libre, equilibrio estático, momento de segundo orden de una superficie, momento de inercia y dinámica (apartado 1.5.4)",
+   "inicio": "21/09/2026",
+   "fin": "01/10/2026",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Raul O.",
+   "critica": false,
+   "entregable": "Fichas de 1 libro + 1 revista científica (p. ej. Mechanism and Machine Theory) + borrador de la otra mitad del 1.5.4"
+  },
+  {
+   "id": "1.11",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Bibliografía tema d) Ciencia de Materiales, acotado a los cuatro materiales impuestos: aluminio 6063, AISI 304, PE y PTFE (apartado 1.5.1)",
+   "inicio": "28/09/2026",
+   "fin": "02/10/2026",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Jan D.",
+   "critica": false,
+   "entregable": "Tabla de propiedades (densidad, límite elástico, maquinabilidad) con fuente citada + borrador del 1.5.1"
+  },
+  {
+   "id": "1.12",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Bibliografía tema e) Dibujo Industrial: representación, acotación, tolerancias, ajustes, cajetín y formatos (ISO 128, 129, 286, 1101, 3952, 5457, 7200) (apartado 1.5.2)",
+   "inicio": "21/09/2026",
+   "fin": "02/10/2026",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Victor G.",
+   "critica": false,
+   "entregable": "Listado de normas aplicables al proyecto + borrador del 1.5.2 (se reutiliza en la fase de planos de diciembre)"
+  },
+  {
+   "id": "1.13",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Consolidación bibliográfica: comprobar que entre todos suman como mínimo 5 libros y 2 revistas, unificar el formato UNE 50-104-94 y redactar el comentario de cada referencia",
+   "inicio": "02/10/2026",
+   "fin": "05/10/2026",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Apartado 4 BIBLIOGRAFÍA montado y comentario de cada referencia dentro del apartado 1.5"
+  },
+  {
+   "id": "1.14",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Montaje del diagrama de Gantt en Excel con el calendario real del G1: semanas numeradas con sus fechas, leyenda de 6 iniciales, celdas de 'control' y de 'correcciones', festivos y huecos sin tutoría",
+   "inicio": "23/09/2026",
+   "fin": "29/09/2026",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Gantt-G1-v1.xlsx con dos bloques (1r y 2n semestre) e imagen exportada"
+  },
+  {
+   "id": "1.15",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Redacción de la justificación del apartado 1.4 e inserción del Gantt como figura con pie en estilo 'Figura' y regeneración del índice de figuras",
+   "inicio": "28/09/2026",
+   "fin": "29/09/2026",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Marc B.",
+   "critica": true,
+   "entregable": "Apartado 1.4 del Word con texto de 250-400 palabras y 'Fig.1.- Diagrama de Gantt del plan de trabajo del Grupo 1'"
+  },
+  {
+   "id": "1.16",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Envío del plan de trabajo por correo a Andrés García Granada (plazo: antes del 30/09)",
+   "inicio": "30/09/2026",
+   "fin": "30/09/2026",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Correo enviado con el Gantt en PDF/Excel y el apartado 1.4 ya escrito en el Word compartido"
+  },
+  {
+   "id": "1.17",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Instalación y validación de la configuración de SolidWorks del profesor en los 6 portátiles, y prueba de abrir el ensamblaje sin romper referencias",
+   "inicio": "21/09/2026",
+   "fin": "30/09/2026",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Ignasi S.",
+   "critica": false,
+   "entregable": "Los 6 equipos abren Proyecto-inicio.SLDASM con las plantillas y el cajetín correctos"
+  },
+  {
+   "id": "1.18",
+   "fase": "FASE 1 — Croquis, bibliografía y plan de trabajo (hasta el Control 1)",
+   "nombre": "Guion y ensayo del Control 1: quién dice qué en los 30 minutos del 06/10 a las 10:30 en Aula SEAT (bibliografía, plan de trabajo, dimensionamiento)",
+   "inicio": "02/10/2026",
+   "fin": "05/10/2026",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Guion de 30 min con reparto por persona + carpeta de material impreso para el control"
+  },
+  {
+   "id": "2.1",
+   "fase": "FASE 2 — Comprensión del mecanismo y cinemática analítica de la posición de estudio",
+   "nombre": "Registrar la velocidad angular de la manivela asignada en el control y fijar las condiciones de cálculo (posición de estudio, sentido de giro, sistema de referencia)",
+   "inicio": "06/10/2026",
+   "fin": "07/10/2026",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Victor G.",
+   "critica": true,
+   "entregable": "Hoja de datos de partida en el Excel maestro y anotación en la bitácora (es el input que desbloquea toda la cinemática)"
+  },
+  {
+   "id": "2.2",
+   "fase": "FASE 2 — Comprensión del mecanismo y cinemática analítica de la posición de estudio",
+   "nombre": "Grados de libertad y movilidad: aplicar el criterio de Grübler-Kutzbach, contar elementos y pares de tipo I y II y comprobar GM = 1 (apartado 2.1 del informe)",
+   "inicio": "07/10/2026",
+   "fin": "13/10/2026",
+   "responsable": "Ignasi S.",
+   "iniciales": "IS",
+   "revisor": "Jan D.",
+   "critica": false,
+   "entregable": "Apartado 2.1 redactado con la ecuación de movilidad resuelta y la identificación de los dos grupos de Assur"
+  },
+  {
+   "id": "2.3",
+   "fase": "FASE 2 — Comprensión del mecanismo y cinemática analítica de la posición de estudio",
+   "nombre": "Posiciones extremas y trayectorias: determinar los puntos muertos, la carrera del pistón y el ángulo de oscilación del balancín (apartado 2.2)",
+   "inicio": "07/10/2026",
+   "fin": "20/10/2026",
+   "responsable": "Victor G.",
+   "iniciales": "VG",
+   "revisor": "Marc B.",
+   "critica": false,
+   "entregable": "Figuras de las dos posiciones extremas acotadas + tabla de carreras y recorridos"
+  },
+  {
+   "id": "2.4",
+   "fase": "FASE 2 — Comprensión del mecanismo y cinemática analítica de la posición de estudio",
+   "nombre": "Cálculo analítico a mano de posiciones y velocidades para la posición de estudio (ecuaciones de cierre de los dos grupos de Assur)",
+   "inicio": "07/10/2026",
+   "fin": "23/10/2026",
+   "responsable": "Raul O.",
+   "iniciales": "RO",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Desarrollo manuscrito escaneado con vA, vB, w3, w5 y resultados numéricos con unidades"
+  },
+  {
+   "id": "2.5",
+   "fase": "FASE 2 — Comprensión del mecanismo y cinemática analítica de la posición de estudio",
+   "nombre": "Cálculo analítico a mano de aceleraciones para la misma posición, incluida la componente de Coriolis del collarín",
+   "inicio": "19/10/2026",
+   "fin": "30/10/2026",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Desarrollo manuscrito con aA, aB, alfa3 y alfa5 y justificación del término de Coriolis"
+  },
+  {
+   "id": "2.6",
+   "fase": "FASE 2 — Comprensión del mecanismo y cinemática analítica de la posición de estudio",
+   "nombre": "Hoja Excel maestra: parametrizar el mecanismo (cotas como variables) y automatizar posición, velocidad y aceleración para cualquier ángulo de manivela",
+   "inicio": "21/10/2026",
+   "fin": "06/11/2026",
+   "responsable": "Ignasi S.",
+   "iniciales": "IS",
+   "revisor": "Raul O.",
+   "critica": false,
+   "entregable": "Matriz de cálculo v1 que reproduce a mano el resultado de 2.4 con error < 0,1 % (semilla del anexo 5.3)"
+  },
+  {
+   "id": "2.7",
+   "fase": "FASE 2 — Comprensión del mecanismo y cinemática analítica de la posición de estudio",
+   "nombre": "Montar el mecanismo en PAM y lanzar la primera simulación de una vuelta completa con intervalo de 0,01 s",
+   "inicio": "29/10/2026",
+   "fin": "06/11/2026",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Jan D.",
+   "critica": false,
+   "entregable": "Archivo PAM del mecanismo + exportación de resultados de la posición de estudio para comparar con 2.4 y 2.5"
+  },
+  {
+   "id": "2.8",
+   "fase": "FASE 2 — Comprensión del mecanismo y cinemática analítica de la posición de estudio",
+   "nombre": "Redacción de los apartados 2.1, 2.2 y 2.3 del informe con los resultados ya obtenidos, aprovechando las 3 semanas sin tutoría",
+   "inicio": "02/11/2026",
+   "fin": "06/11/2026",
+   "responsable": "Victor G.",
+   "iniciales": "VG",
+   "revisor": "Ignasi S.",
+   "critica": false,
+   "entregable": "Tres apartados del Word escritos, con sus figuras denominadas y sus ecuaciones en estilo 'Ecuacion'"
+  },
+  {
+   "id": "3.1",
+   "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
+   "nombre": "Definir materiales, secciones normalizadas y elementos comerciales de cada pieza: pletina Al 6063 15x3, varilla AISI 304 Ø6 para los ejes, casquillos PE/PTFE y anillos DIN 6799",
+   "inicio": "02/11/2026",
+   "fin": "06/11/2026",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Marc B.",
+   "critica": true,
+   "entregable": "Tabla de decisión material-sección-pieza aprobada en la sesión del 06/11 (congela el diseño antes de modelar)"
+  },
+  {
+   "id": "3.2",
+   "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
+   "nombre": "Modelado 3D de la pieza 3.1 Biela en SolidWorks, con material asignado y siguiendo la nomenclatura N.M.",
+   "inicio": "09/11/2026",
+   "fin": "20/11/2026",
+   "responsable": "Raul O.",
+   "iniciales": "RO",
+   "revisor": "Victor G.",
+   "critica": true,
+   "entregable": "Archivo 3.1.biela.SLDPRT con material 6063 y cotas coincidentes con el croquis validado"
+  },
+  {
+   "id": "3.3",
+   "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
+   "nombre": "Modelado 3D de la pieza 4.1 Pistón y de su guía, con los ajustes previstos para el eje de Ø6",
+   "inicio": "09/11/2026",
+   "fin": "20/11/2026",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Victor G.",
+   "critica": true,
+   "entregable": "Archivo 4.1.piston.SLDPRT con material asignado"
+  },
+  {
+   "id": "3.4",
+   "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
+   "nombre": "Modelado 3D de la pieza 5.1 Collarín (par de tipo II con el balancín)",
+   "inicio": "09/11/2026",
+   "fin": "20/11/2026",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Archivo 5.1.collarin.SLDPRT con material asignado"
+  },
+  {
+   "id": "3.5",
+   "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
+   "nombre": "Modelado 3D de la pieza 5.2 Balancín, incluida su articulación al bastidor",
+   "inicio": "09/11/2026",
+   "fin": "20/11/2026",
+   "responsable": "Ignasi S.",
+   "iniciales": "IS",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Archivo 5.2.balancin.SLDPRT con material asignado"
+  },
+  {
+   "id": "3.6",
+   "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
+   "nombre": "Ensamblaje completo: montar las 4 piezas nuevas sobre el bastidor y la manivela que da hechos el profesor, con las relaciones de posición correctas",
+   "inicio": "18/11/2026",
+   "fin": "27/11/2026",
+   "responsable": "Victor G.",
+   "iniciales": "VG",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Proyecto-inicio.SLDASM actualizado, con 1 grado de libertad y sin relaciones redundantes"
+  },
+  {
+   "id": "3.7",
+   "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
+   "nombre": "Estudio de interferencias y detección de colisiones a lo largo de una vuelta completa de manivela",
+   "inicio": "27/11/2026",
+   "fin": "01/12/2026",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Jan D.",
+   "critica": true,
+   "entregable": "Informe de interferencias con resultado 'ninguna colisión' (requisito previo e imprescindible para sacar planos)"
+  },
+  {
+   "id": "3.8",
+   "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
+   "nombre": "Propiedades físicas de cada elemento móvil: masa con el material simulado, posición del centro de gravedad y momentos de inercia",
+   "inicio": "23/11/2026",
+   "fin": "01/12/2026",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Ignasi S.",
+   "critica": false,
+   "entregable": "Tabla de m, CdG e I de los elementos 3, 4, 5.1 y 5.2 (dato de entrada de la matriz de fuerzas de abril)"
+  },
+  {
+   "id": "3.9",
+   "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
+   "nombre": "Simulación de movimiento en SolidWorks Motion de una vuelta completa y exportación de las gráficas de velocidad y aceleración",
+   "inicio": "27/11/2026",
+   "fin": "11/12/2026",
+   "responsable": "Ignasi S.",
+   "iniciales": "IS",
+   "revisor": "Victor G.",
+   "critica": false,
+   "entregable": "Estudio de movimiento guardado + gráficas exportadas (semilla del anexo 5.1)"
+  },
+  {
+   "id": "3.10",
+   "fase": "FASE 3 — Modelado 3D, ensamblaje y simulación de movimiento",
+   "nombre": "Primera comparativa de las cuatro vías para la posición de estudio: teoría a mano, PAM, SolidWorks y Excel, con justificación de las divergencias",
+   "inicio": "02/12/2026",
+   "fin": "11/12/2026",
+   "responsable": "Raul O.",
+   "iniciales": "RO",
+   "revisor": "Jan D.",
+   "critica": false,
+   "entregable": "Tabla del apartado 2.7 rellena para vA y w3, con la columna de error y el comentario de las diferencias"
+  },
+  {
+   "id": "4.1",
+   "fase": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial",
+   "nombre": "Cálculo y justificación de los ajustes y tolerancias de las uniones: eje AISI 304 Ø6 con los agujeros de las barras, casquillos y anillos DIN 6799",
+   "inicio": "20/11/2026",
+   "fin": "27/11/2026",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Marc B.",
+   "critica": true,
+   "entregable": "Hoja de cálculo de ajustes según ISO 286 con el juego elegido justificado (la guía exige justificarlos CON CÁLCULOS)"
+  },
+  {
+   "id": "4.2",
+   "fase": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial",
+   "nombre": "Plano de pieza de 3.1 Biela, acotado, con tolerancias dimensionales y geométricas y cajetín actualizado (G1, nombres, fecha)",
+   "inicio": "27/11/2026",
+   "fin": "03/12/2026",
+   "responsable": "Victor G.",
+   "iniciales": "VG",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Plano 3.1 en formato ISO 5457 con cajetín ISO 7200 corregido"
+  },
+  {
+   "id": "4.3",
+   "fase": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial",
+   "nombre": "Plano de pieza de 4.1 Pistón, acotado y con tolerancias",
+   "inicio": "27/11/2026",
+   "fin": "03/12/2026",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Jan D.",
+   "critica": true,
+   "entregable": "Plano 4.1 con cajetín corregido"
+  },
+  {
+   "id": "4.4",
+   "fase": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial",
+   "nombre": "Plano de pieza de 5.1 Collarín, acotado y con tolerancias",
+   "inicio": "27/11/2026",
+   "fin": "03/12/2026",
+   "responsable": "Raul O.",
+   "iniciales": "RO",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Plano 5.1 con cajetín corregido"
+  },
+  {
+   "id": "4.5",
+   "fase": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial",
+   "nombre": "Plano de pieza de 5.2 Balancín, acotado y con tolerancias",
+   "inicio": "27/11/2026",
+   "fin": "03/12/2026",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Victor G.",
+   "critica": true,
+   "entregable": "Plano 5.2 con cajetín corregido"
+  },
+  {
+   "id": "4.6",
+   "fase": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial",
+   "nombre": "Plano de conjunto del mecanismo con lista de despiece y tablas actualizadas y coincidentes con el ensamblaje",
+   "inicio": "01/12/2026",
+   "fin": "04/12/2026",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Proyecto-inicio.SLDDRW con vistas de conjunto, globos y tabla de materiales"
+  },
+  {
+   "id": "4.7",
+   "fase": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial",
+   "nombre": "Revisión cruzada de los 5 planos contra la norma (acotación, cajetín, formato) y contra el ensamblaje; cierre antes del puente del 5 al 8 de diciembre",
+   "inicio": "04/12/2026",
+   "fin": "09/12/2026",
+   "responsable": "Victor G.",
+   "iniciales": "VG",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Checklist de revisión firmada por dos personas distintas del autor de cada plano"
+  },
+  {
+   "id": "4.8",
+   "fase": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial",
+   "nombre": "Entrega de los planos al profesor para su control (fecha de la Guía: 10 de diciembre de 2026)",
+   "inicio": "10/12/2026",
+   "fin": "10/12/2026",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Juego completo de planos en PDF entregado y registrado en la bitácora"
+  },
+  {
+   "id": "4.9",
+   "fase": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial",
+   "nombre": "Correcciones de piezas, ensamblaje y planos tras las observaciones recibidas, en las tres últimas sesiones del cuatrimestre",
+   "inicio": "14/12/2026",
+   "fin": "17/12/2026",
+   "responsable": "TODOS",
+   "iniciales": "ALL",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Modelos y planos corregidos y congelados: ya no se tocan hasta febrero"
+  },
+  {
+   "id": "4.10",
+   "fase": "FASE 4 — Tolerancias, planos y Control Final de Dibujo Industrial",
+   "nombre": "Preparación y ensayo del Control Final de Dibujo Industrial del 18/12 a las 12:00 en Aula SEAT (último turno): checklist de piezas y ensamblajes",
+   "inicio": "16/12/2026",
+   "fin": "17/12/2026",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Guion de 30 min y carpeta con piezas, ensamblaje y planos abiertos y listos para enseñar"
+  },
+  {
+   "id": "5.1",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Reunión de relanzamiento del 2º cuatrimestre: repaso de resultados del 1Q, rotación de responsables y publicación del Gantt v3 con la carga de febrero-marzo",
+   "inicio": "01/02/2027",
+   "fin": "02/02/2027",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Nuevo reparto volcado como comentarios en el Word y Gantt v3 enviado al grupo"
+  },
+  {
+   "id": "5.2",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Cinemática analítica completa de una vuelta: tabla de posiciones, velocidades y aceleraciones cada 30º de manivela",
+   "inicio": "02/02/2027",
+   "fin": "26/02/2027",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Tabla de 12 posiciones resueltas a mano y gráficas de v y a frente al ángulo"
+  },
+  {
+   "id": "5.3",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Simulación completa en PAM de una vuelta con intervalo de 0,01 s y exportación ordenada de resultados",
+   "inicio": "02/02/2027",
+   "fin": "26/02/2027",
+   "responsable": "Raul O.",
+   "iniciales": "RO",
+   "revisor": "Marc B.",
+   "critica": true,
+   "entregable": "Archivo PAM definitivo + CSV de resultados (apartado 2.5 del informe)"
+  },
+  {
+   "id": "5.4",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Simulación completa en SolidWorks Motion y exportación de las gráficas de cinemática del anexo 5.1",
+   "inicio": "02/02/2027",
+   "fin": "26/02/2027",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Estudio de movimiento + gráficas exportadas (apartado 2.6 y anexo 5.1)"
+  },
+  {
+   "id": "5.5",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Matriz de cálculo en Excel extendida a la vuelta completa, con las mismas 12 posiciones que el método analítico (anexo 5.3)",
+   "inicio": "08/02/2027",
+   "fin": "05/03/2027",
+   "responsable": "Victor G.",
+   "iniciales": "VG",
+   "revisor": "Ignasi S.",
+   "critica": false,
+   "entregable": "Excel que reproduce automáticamente las tablas de 5.2 y sirve de comprobación cruzada"
+  },
+  {
+   "id": "5.6",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Comparativa de los métodos: tablas resumen de resultados y justificación escrita de cada divergencia (apartado 2.7)",
+   "inicio": "01/03/2027",
+   "fin": "12/03/2027",
+   "responsable": "Ignasi S.",
+   "iniciales": "IS",
+   "revisor": "Victor G.",
+   "critica": true,
+   "entregable": "Apartado 2.7 con la tabla Incógnita / Unidades / Teórica / PAM / SolidWorks / Excel y el comentario de las diferencias"
+  },
+  {
+   "id": "5.7",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Redacción de los apartados 2.3 (velocidades y aceleraciones), 2.5 (esquema PAM) y 2.6 (esquema SolidWorks) del informe",
+   "inicio": "01/03/2027",
+   "fin": "15/03/2027",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Marc B.",
+   "critica": false,
+   "entregable": "Tres apartados escritos con sus figuras denominadas y numeradas"
+  },
+  {
+   "id": "5.8",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Ensayo interno del control cinemático: cada uno explica al grupo el método que NO ha hecho, para poder responder preguntas cruzadas del tribunal",
+   "inicio": "15/03/2027",
+   "fin": "17/03/2027",
+   "responsable": "TODOS",
+   "iniciales": "ALL",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Guion del control (30 min) y batería de 20 preguntas cruzadas respondidas"
+  },
+  {
+   "id": "5.9",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Lista de material y presupuesto de la maqueta a partir de los planos: metros de pletina 15x3, varilla Ø6, casquillos PE/PTFE, anillos DIN 6799 y tornillería",
+   "inicio": "01/02/2027",
+   "fin": "05/02/2027",
+   "responsable": "Ignasi S.",
+   "iniciales": "IS",
+   "revisor": "Victor G.",
+   "critica": true,
+   "entregable": "Lista de compra con cantidades, referencias y precio estimado"
+  },
+  {
+   "id": "5.10",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Consultar al profesor el acceso al taller, los plazos de compra y quién mecaniza las piezas (la documentación oficial no fija ninguna fecha de maqueta)",
+   "inicio": "01/02/2027",
+   "fin": "03/02/2027",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Respuesta por escrito del profesor con calendario de taller (riesgo nº1 del proyecto)"
+  },
+  {
+   "id": "5.11",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Pedido y recepción del material de la maqueta",
+   "inicio": "08/02/2027",
+   "fin": "26/02/2027",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Marc B.",
+   "critica": true,
+   "entregable": "Material recibido y comprobado contra la lista antes de fin de febrero"
+  },
+  {
+   "id": "5.12",
+   "fase": "FASE 5 — Cinemática por tres métodos y fabricación de la maqueta",
+   "nombre": "Fabricación de las piezas de la maqueta a escala 1:10: corte de pletinas, taladrado de los agujeros de articulación, corte de ejes y desbarbado",
+   "inicio": "01/03/2027",
+   "fin": "19/03/2027",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Victor G.",
+   "critica": true,
+   "entregable": "Las 4 piezas móviles fabricadas y verificadas con calibre frente a las cotas del plano"
+  },
+  {
+   "id": "6.1",
+   "fase": "FASE 6 — Dinámica, matriz de fuerzas y montaje de la maqueta",
+   "nombre": "Corrección de la cinemática según el feedback recibido en el control y cierre definitivo de los resultados cinemáticos",
+   "inicio": "19/03/2027",
+   "fin": "02/04/2027",
+   "responsable": "Raul O.",
+   "iniciales": "RO",
+   "revisor": "Jan D.",
+   "critica": true,
+   "entregable": "Tablas y gráficas corregidas, marcadas como versión definitiva (Semana Santa del 22 al 29/03 queda como zona muerta)"
+  },
+  {
+   "id": "6.2",
+   "fase": "FASE 6 — Dinámica, matriz de fuerzas y montaje de la maqueta",
+   "nombre": "Diagramas de sólido libre de cada elemento y planteamiento de la matriz de fuerzas según la orientación recibida en el control",
+   "inicio": "30/03/2027",
+   "fin": "09/04/2027",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "DSL de los 4 elementos móviles y sistema de ecuaciones planteado con las incógnitas nombradas"
+  },
+  {
+   "id": "6.3",
+   "fase": "FASE 6 — Dinámica, matriz de fuerzas y montaje de la maqueta",
+   "nombre": "Cálculo analítico de las fuerzas en las uniones y del par motriz necesario, usando las masas e inercias obtenidas en SolidWorks",
+   "inicio": "06/04/2027",
+   "fin": "16/04/2027",
+   "responsable": "Raul O.",
+   "iniciales": "RO",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Resultados numéricos de B34, B45, reacciones en el bastidor y Mmotor para la posición de estudio"
+  },
+  {
+   "id": "6.4",
+   "fase": "FASE 6 — Dinámica, matriz de fuerzas y montaje de la maqueta",
+   "nombre": "Cálculo de fuerzas con PAM y con SolidWorks Motion y exportación de las gráficas de cinética del anexo 5.2",
+   "inicio": "06/04/2027",
+   "fin": "16/04/2027",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Victor G.",
+   "critica": false,
+   "entregable": "Gráficas de fuerzas en las uniones y de par motriz a lo largo de una vuelta (anexo 5.2)"
+  },
+  {
+   "id": "6.5",
+   "fase": "FASE 6 — Dinámica, matriz de fuerzas y montaje de la maqueta",
+   "nombre": "Matriz de fuerzas en Excel y comparativa final de las cuatro vías para fuerzas y par motriz (apartados 2.4 y 2.7)",
+   "inicio": "12/04/2027",
+   "fin": "22/04/2027",
+   "responsable": "Victor G.",
+   "iniciales": "VG",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Tabla comparativa completa con columna de error y justificación de divergencias"
+  },
+  {
+   "id": "6.6",
+   "fase": "FASE 6 — Dinámica, matriz de fuerzas y montaje de la maqueta",
+   "nombre": "Montaje de la maqueta sobre la bancada: anclaje de los apoyos fijos en la malla de 25 mm, ejes, casquillos y anillos de seguridad",
+   "inicio": "30/03/2027",
+   "fin": "09/04/2027",
+   "responsable": "Ignasi S.",
+   "iniciales": "IS",
+   "revisor": "Marc B.",
+   "critica": true,
+   "entregable": "Maqueta 1:10 montada y sujeta a la bancada"
+  },
+  {
+   "id": "6.7",
+   "fase": "FASE 6 — Dinámica, matriz de fuerzas y montaje de la maqueta",
+   "nombre": "Ajuste y prueba de la maqueta: dar una vuelta completa sin bloqueos, corregir holguras y comparar el movimiento real con la simulación",
+   "inicio": "12/04/2027",
+   "fin": "20/04/2027",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Maqueta funcionando: vuelta completa sin agarrotamientos, con las desviaciones anotadas"
+  },
+  {
+   "id": "6.8",
+   "fase": "FASE 6 — Dinámica, matriz de fuerzas y montaje de la maqueta",
+   "nombre": "Fotografías de la maqueta y grabación del mecanismo en movimiento para el informe, el vídeo y la presentación",
+   "inicio": "20/04/2027",
+   "fin": "23/04/2027",
+   "responsable": "Ignasi S.",
+   "iniciales": "IS",
+   "revisor": "Jan D.",
+   "critica": true,
+   "entregable": "Carpeta de fotos y clips de la maqueta (la entrega del 05/05 exige explícitamente vídeos y fotos)"
+  },
+  {
+   "id": "6.9",
+   "fase": "FASE 6 — Dinámica, matriz de fuerzas y montaje de la maqueta",
+   "nombre": "Cerrar todas las dudas con el profesor en la última sesión tutorizada del curso (22/04): punto de no retorno",
+   "inicio": "21/04/2027",
+   "fin": "22/04/2027",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Lista de dudas cerradas y anotadas en la bitácora; a partir de aquí solo hay correo"
+  },
+  {
+   "id": "7.1",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Redacción del apartado 2.4 FUERZAS del informe con los resultados y las tablas comparativas",
+   "inicio": "19/04/2027",
+   "fin": "26/04/2027",
+   "responsable": "Raul O.",
+   "iniciales": "RO",
+   "revisor": "Marc B.",
+   "critica": false,
+   "entregable": "Apartado 2.4 escrito con ecuaciones en estilo 'Ecuacion' y tablas denominadas"
+  },
+  {
+   "id": "7.2",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Actualización del apartado 1.4: Gantt real frente al planificado y comentario de las desviaciones (doble barra planificado/ejecutado)",
+   "inicio": "19/04/2027",
+   "fin": "26/04/2027",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Ignasi S.",
+   "critica": false,
+   "entregable": "Figura del Gantt final con las dos barras y párrafo de desviaciones (alimenta las conclusiones)"
+  },
+  {
+   "id": "7.3",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Redacción de la introducción (1.1 objeto, 1.2 antecedentes, 1.3 estructura) y del comentario de cada referencia bibliográfica",
+   "inicio": "06/04/2027",
+   "fin": "23/04/2027",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Victor G.",
+   "critica": false,
+   "entregable": "Introducción completa y apartado 4 con todas las referencias comentadas y fechas de consulta de las webs"
+  },
+  {
+   "id": "7.4",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Redacción de las conclusiones: cumplimiento de los objetivos, utilidad del trabajo y sugerencias de mejora (no un resumen de lo hecho)",
+   "inicio": "23/04/2027",
+   "fin": "29/04/2027",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Raul O.",
+   "critica": true,
+   "entregable": "Apartado 3 CONCLUSIONES con comparación planificado/real y aportes para futuros grupos"
+  },
+  {
+   "id": "7.5",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Montaje de los anexos 5.1 (gráficas de cinemática), 5.2 (gráficas de cinética) y 5.3 (matriz de cálculo)",
+   "inicio": "23/04/2027",
+   "fin": "29/04/2027",
+   "responsable": "Victor G.",
+   "iniciales": "VG",
+   "revisor": "Alex R.",
+   "critica": false,
+   "entregable": "Los tres anexos paginados con todas las figuras denominadas"
+  },
+  {
+   "id": "7.6",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Resumen de menos de 350 palabras que explique la estructura del documento (apartados, anexos, planos, fotos) y listado de símbolos",
+   "inicio": "26/04/2027",
+   "fin": "30/04/2027",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Marc B.",
+   "critica": false,
+   "entregable": "Resumen y listado de símbolos, abreviaturas y acrónimos"
+  },
+  {
+   "id": "7.7",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Guion del vídeo explicativo de 20 minutos: qué cuenta cada uno de los 6 sobre su propio trabajo, con minutos asignados",
+   "inicio": "12/04/2027",
+   "fin": "16/04/2027",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Alex R.",
+   "critica": false,
+   "entregable": "Guion con 6 bloques de unos 3 minutos y lista de planos a grabar"
+  },
+  {
+   "id": "7.8",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Grabación del vídeo explicativo: cada integrante graba su parte y se graba la maqueta funcionando",
+   "inicio": "19/04/2027",
+   "fin": "26/04/2027",
+   "responsable": "TODOS",
+   "iniciales": "ALL",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "6 clips grabados + plano de la maqueta en movimiento"
+  },
+  {
+   "id": "7.9",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Montaje y exportación del vídeo de 20 minutos",
+   "inicio": "26/04/2027",
+   "fin": "30/04/2027",
+   "responsable": "Ignasi S.",
+   "iniciales": "IS",
+   "revisor": "Marc B.",
+   "critica": true,
+   "entregable": "Vídeo final exportado, con rótulos de nombre de cada integrante"
+  },
+  {
+   "id": "7.10",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Recorte y maquetación del informe: memoria técnica a 20 páginas máximo, estilos de pie correctos, regeneración de los 4 índices, revisión de formato y ortografía",
+   "inicio": "28/04/2027",
+   "fin": "03/05/2027",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Victor G.",
+   "critica": true,
+   "entregable": "Informe-gr1.docx cerrado, con índice general, de figuras, de tablas y de ecuaciones actualizados y sin marcadores '¿?.'"
+  },
+  {
+   "id": "7.11",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Preparación del paquete de entrega y comprobación final de que la simulación funciona correctamente en un ordenador distinto al del autor",
+   "inicio": "03/05/2027",
+   "fin": "04/05/2027",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Victor G.",
+   "critica": true,
+   "entregable": "Carpeta con informe (docx+PDF), archivos PAM, archivos SolidWorks, vídeo, fotos y presentación en PDF"
+  },
+  {
+   "id": "7.12",
+   "fase": "FASE 7 — Redacción del informe, vídeo y entrega final",
+   "nombre": "Entrega del material al profesor (fecha límite 05/05/2027)",
+   "inicio": "05/05/2027",
+   "fin": "05/05/2027",
+   "responsable": "Alex R.",
+   "iniciales": "AR",
+   "revisor": "Ignasi S.",
+   "critica": true,
+   "entregable": "Entrega registrada con acuse y copia de seguridad del paquete"
+  },
+  {
+   "id": "8.1",
+   "fase": "FASE 8 — Presentación, ensayo y defensa",
+   "nombre": "Guion de la presentación y reparto de minutos: 20 minutos entre 6 personas, cada uno expone la parte que ha trabajado",
+   "inicio": "26/04/2027",
+   "fin": "29/04/2027",
+   "responsable": "Victor G.",
+   "iniciales": "VG",
+   "revisor": "Alex R.",
+   "critica": false,
+   "entregable": "Guion con bloques de 3 min por persona y transiciones escritas"
+  },
+  {
+   "id": "8.2",
+   "fase": "FASE 8 — Presentación, ensayo y defensa",
+   "nombre": "Diapositivas: contenidos en orden lógico, diapositivas numeradas, todas las figuras y tablas denominadas, ortografía y vocabulario revisados",
+   "inicio": "28/04/2027",
+   "fin": "02/05/2027",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Jan D.",
+   "critica": true,
+   "entregable": "Presentación completa con el Gantt, el croquis, la comparativa de métodos, el vídeo y las fotos de la maqueta"
+  },
+  {
+   "id": "8.3",
+   "fase": "FASE 8 — Presentación, ensayo y defensa",
+   "nombre": "Exportación de la presentación a PDF para incluirla en la entrega del 05/05 (la guía exige entregar la presentación ya terminada)",
+   "inicio": "03/05/2027",
+   "fin": "04/05/2027",
+   "responsable": "Marc B.",
+   "iniciales": "MB",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Presentación en PDF dentro del paquete de entrega"
+  },
+  {
+   "id": "8.4",
+   "fase": "FASE 8 — Presentación, ensayo y defensa",
+   "nombre": "Ensayo cronometrado: dos pases completos con la maqueta y el vídeo delante, midiendo el tiempo de cada persona",
+   "inicio": "06/05/2027",
+   "fin": "11/05/2027",
+   "responsable": "TODOS",
+   "iniciales": "ALL",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Dos ensayos cronometrados dentro de los 20 min, con los ajustes de guion aplicados"
+  },
+  {
+   "id": "8.5",
+   "fase": "FASE 8 — Presentación, ensayo y defensa",
+   "nombre": "Repaso cruzado: cada uno explica a los demás la parte que NO ha hecho y se responde una batería de preguntas tipo tribunal",
+   "inicio": "06/05/2027",
+   "fin": "11/05/2027",
+   "responsable": "Raul O.",
+   "iniciales": "RO",
+   "revisor": "Jan D.",
+   "critica": true,
+   "entregable": "Batería de 30 preguntas del proyecto entero respondida por los 6 (la nota es individual y el tribunal pregunta de todo)"
+  },
+  {
+   "id": "8.6",
+   "fase": "FASE 8 — Presentación, ensayo y defensa",
+   "nombre": "Cumplimentar las hojas de evaluación entre compañeros (10 puntos por aspecto a repartir entre los 6, incluyéndose uno mismo) para entregarlas el día de la defensa",
+   "inicio": "07/05/2027",
+   "fin": "11/05/2027",
+   "responsable": "Jan D.",
+   "iniciales": "JD",
+   "revisor": "Alex R.",
+   "critica": false,
+   "entregable": "6 hojas de evaluación cumplimentadas e impresas (criterio binario: se entrega o no se entrega)"
+  },
+  {
+   "id": "8.7",
+   "fase": "FASE 8 — Presentación, ensayo y defensa",
+   "nombre": "Presentación y defensa ante el tribunal en Aula SEAT (planificado el 12/05; la Rotación sitúa al G1 el 13/05 a las 11:00, pendiente de confirmar)",
+   "inicio": "12/05/2027",
+   "fin": "12/05/2027",
+   "responsable": "TODOS",
+   "iniciales": "ALL",
+   "revisor": "Alex R.",
+   "critica": true,
+   "entregable": "Defensa realizada por los 6 integrantes + entrega de las evaluaciones entre compañeros"
+  }
+ ],
+ "hitos": [
+  {
+   "fecha": "22/09/2026",
+   "nombre": "Croquis validado por el grupo entero: una vuelta completa sin bloqueos y GM = 1",
+   "bloqueante": true
+  },
+  {
+   "fecha": "29/09/2026",
+   "nombre": "Plan de trabajo cerrado internamente (víspera del plazo, por si 'antes del 30/09' significa el 29)",
+   "bloqueante": true
+  },
+  {
+   "fecha": "30/09/2026",
+   "nombre": "Envío del plan de trabajo (Gantt + justificación del apartado 1.4) al profesor por correo",
+   "bloqueante": true
+  },
+  {
+   "fecha": "06/10/2026",
+   "nombre": "CONTROL 1 — 10:30 h, Aula SEAT: Bibliografía, Plan de trabajo y Revisión del Dimensionamiento. Aquí se asigna la velocidad angular de la manivela",
+   "bloqueante": true
+  },
+  {
+   "fecha": "06/11/2026",
+   "nombre": "Hito interno: cinemática analítica de la posición de estudio cerrada y contrastada con PAM",
+   "bloqueante": false
+  },
+  {
+   "fecha": "01/12/2026",
+   "nombre": "Hito interno: ensamblaje verificado sin interferencias ni colisiones en una vuelta completa",
+   "bloqueante": true
+  },
+  {
+   "fecha": "10/12/2026",
+   "nombre": "Entrega de planos para su control (fecha de la Guía; no aparece en la planificación 1Q, pendiente de confirmar)",
+   "bloqueante": true
+  },
+  {
+   "fecha": "18/12/2026",
+   "nombre": "CONTROL FINAL DIBUJO INDUSTRIAL — 12:00 h, Aula SEAT (último turno): piezas y ensamblajes",
+   "bloqueante": true
+  },
+  {
+   "fecha": "01/02/2027",
+   "nombre": "Orientación del 2º cuatrimestre en Aula 2º GETI y rotación de responsables (Gantt v3)",
+   "bloqueante": false
+  },
+  {
+   "fecha": "18/02/2027",
+   "nombre": "Última sesión tutorizada antes del control cinemático: empiezan 7 semanas sin profesor",
+   "bloqueante": true
+  },
+  {
+   "fecha": "26/02/2027",
+   "nombre": "Hito interno: los tres métodos cinemáticos resueltos para una vuelta completa",
+   "bloqueante": true
+  },
+  {
+   "fecha": "12/03/2027",
+   "nombre": "Hito interno: comparativa de métodos cerrada y divergencias justificadas",
+   "bloqueante": true
+  },
+  {
+   "fecha": "18/03/2027",
+   "nombre": "CONTROL CINEMÁTICO POR TRES MÉTODOS + orientación de la matriz de fuerzas (fecha más temprana; la Rotación pone al G1 el 19/03 a las 11:30 en Aula SEAT)",
+   "bloqueante": true
+  },
+  {
+   "fecha": "09/04/2027",
+   "nombre": "Hito interno: maqueta 1:10 montada sobre la bancada",
+   "bloqueante": true
+  },
+  {
+   "fecha": "20/04/2027",
+   "nombre": "Hito interno: maqueta ajustada, da una vuelta completa sin bloqueos",
+   "bloqueante": true
+  },
+  {
+   "fecha": "22/04/2027",
+   "nombre": "Última sesión tutorizada de todo el proyecto: punto de no retorno, después solo hay correo",
+   "bloqueante": true
+  },
+  {
+   "fecha": "30/04/2027",
+   "nombre": "Hito interno de congelación: informe, vídeo y presentación cerrados, 5 días antes de la entrega",
+   "bloqueante": true
+  },
+  {
+   "fecha": "05/05/2027",
+   "nombre": "ENTREGA FINAL: memoria técnica, archivos PAM y SolidWorks, vídeo, fotos y presentación en PDF, con la simulación funcionando",
+   "bloqueante": true
+  },
+  {
+   "fecha": "12/05/2027",
+   "nombre": "PRESENTACIÓN Y DEFENSA ante tribunal en Aula SEAT + entrega de las evaluaciones entre compañeros (fecha más temprana; la Rotación pone al G1 el 13/05 a las 11:00)",
+   "bloqueante": true
+  }
+ ]
+}/*__FIN__*/;
+const HOY = new Date(2026,8,21);
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const d = s => { const [a,b,c] = s.split('/').map(Number); return new Date(c,b-1,a); };
+const fmt = x => x.toLocaleDateString('es-ES',{day:'numeric',month:'short'});
+const corto = n => { const x = n.split(/[(:;]| — | - /)[0].trim().replace(/[,.]$/,'');
+  return x.length > 56 ? x.slice(0,54).replace(/\s\S*$/,'')+'…' : x; };
+const cortoFase = n => n.replace(/^FASE \d+ — /,'').split('(')[0].trim();
+const esCorr = t => /correc/i.test(t.nombre);
+
+const tareas = DATOS.tareas.map(t => ({...t, di:d(t.inicio), df:d(t.fin)}));
+const hitos  = DATOS.hitos.map(h => ({...h, dd:d(h.fecha)}));
+const fases  = DATOS.fases.map(f => f.nombre);
+
+const RANGOS = [
+  [new Date(2026,8,14), new Date(2027,4,20)],
+  [new Date(2026,8,14), new Date(2026,11,23)],
+  [new Date(2027,1,1),  new Date(2027,4,20)],
+];
+let rango = 1, fPer = null, fCrit = false;
+
+(function(){
+  const p = hitos.filter(h => h.dd >= HOY).sort((a,b)=>a.dd-b.dd)[0];
+  if (p) {
+    const n = Math.round((p.dd-HOY)/864e5);
+    document.getElementById('k1').textContent = n + (n===1?' día':' días');
+    document.getElementById('k1l').textContent = corto(p.nombre) + ' · ' + fmt(p.dd);
+  }
+  document.getElementById('k2').textContent = Math.round((new Date(2027,4,5)-HOY)/864e5) + ' días';
+  document.getElementById('k3').textContent = tareas.length;
+  document.getElementById('k3l').textContent = tareas.filter(t=>t.critica).length + ' en el camino crítico';
+  document.getElementById('pie').textContent =
+    tareas.length + ' tareas · ' + fases.length + ' fases · ' + hitos.length + ' hitos · del 21 sept 2026 al 13 may 2027';
+})();
+
+function render(){
+  const T0 = RANGOS[rango][0], T1 = RANGOS[rango][1], SPAN = T1-T0;
+  const pos = x => (x-T0)/SPAN*100;
+  const vis = t => t.df >= T0 && t.di <= T1;
+
+  const meses = [];
+  for (let y=T0.getFullYear(), m=T0.getMonth();;m++){
+    if (m>11){ m=0; y++; }
+    const f = new Date(y,m,1);
+    if (f > T1) break;
+    meses.push(f);
+  }
+  const lineas = meses.map(f => pos(f) > 0 ? '<i class="gl" style="left:'+pos(f)+'%"></i>' : '').join('')
+    + (HOY>=T0 && HOY<=T1 ? '<i class="today" style="left:'+pos(HOY)+'%"></i>' : '');
+
+  let h = '<div class="hd"><div class="pad"></div><div class="trk">'
+    + meses.map(function(f,i){
+        const nx = meses[i+1] || T1;
+        const a = Math.max(f,T0), b = Math.min(nx,T1);
+        return '<div class="mon" style="flex:0 0 ' + (b-a)/SPAN*100 + '%">'
+             + MES[f.getMonth()] + (f.getMonth()===0 ? " '27" : '') + '</div>';
+      }).join('')
+    + '</div></div>';
+
+  fases.forEach(function(fn){
+    const ts = tareas.filter(t => t.fase===fn && vis(t));
+    if (!ts.length) return;
+    h += '<div class="phase"><div title="'+fn+'">'+cortoFase(fn)+'</div></div>';
+    ts.forEach(function(t){
+      const a = Math.max(t.di,T0), b = Math.min(t.df,T1);
+      const l = pos(a), w = Math.max(pos(b)-l, .3);
+      const meta = encodeURIComponent(JSON.stringify(
+        {n:t.nombre,i:t.inicio,f:t.fin,r:t.responsable,v:t.revisor,c:t.critica,e:t.entregable}));
+      h += '<div class="row" data-per="'+t.responsable+'" data-crit="'+t.critica+'">'
+        + '<div class="name"><span class="chip">'+t.iniciales+'</span>'
+        + '<span class="txt" title="'+t.nombre+'">'+corto(t.nombre)+'</span></div>'
+        + '<div class="trk">'+lineas+'<div class="bar'+(t.critica?' crit':'')+(esCorr(t)?' corr':'')+'" '
+        + 'style="left:'+l+'%;width:'+w+'%" data-t="'+meta+'"></div></div></div>';
+    });
+  });
+
+  h += '<div class="mstrip"><div class="pad">Hitos</div><div class="trk">'+lineas
+    + hitos.filter(x => x.dd>=T0 && x.dd<=T1).map(function(x){
+        const soft = /confirmar|probablemente/i.test(x.nombre + (x.detalle||''));
+        return '<i class="ms'+(soft?' soft':'')+'" style="left:'+pos(x.dd)+'%" data-t="'
+          + encodeURIComponent(JSON.stringify({n:x.nombre,i:x.fecha,hito:1,e:x.detalle||''}))+'"></i>';
+      }).join('')
+    + '</div></div>';
+
+  document.getElementById('grid').innerHTML = h;
+  aplica();
+}
+
+(function(){
+  let l = '';
+  fases.forEach(function(fn){
+    const ts = tareas.filter(t => t.fase===fn);
+    if (!ts.length) return;
+    l += '<div class="lphase">'+cortoFase(fn)+'</div>';
+    ts.forEach(function(t){
+      l += '<div class="item'+(t.critica?' crit':'')+'" data-per="'+t.responsable+'" data-crit="'+t.critica+'">'
+        + '<h3>'+corto(t.nombre)+' '+(t.critica?'<span class="tag">crítica</span>':'')+'</h3>'
+        + '<div class="meta"><span><b>'+t.responsable+'</b></span><span>'+fmt(t.di)+' → '+fmt(t.df)+'</span>'
+        + (t.revisor ? '<span>revisa '+t.revisor+'</span>' : '') + '</div></div>';
+    });
+  });
+  document.getElementById('list').innerHTML = l;
+})();
+
+const PERS = [...new Set(tareas.map(t=>t.responsable))].filter(p=>p!=='TODOS').sort();
+document.getElementById('f-per').innerHTML =
+  PERS.map(p => '<button data-p="'+p+'" aria-pressed="false">'+p+'</button>').join(' ');
+
+function aplica(){
+  document.querySelectorAll('.row,.item').forEach(function(el){
+    const okP = !fPer || el.dataset.per===fPer || el.dataset.per==='TODOS';
+    const okC = !fCrit || el.dataset.crit==='true';
+    el.style.opacity = (okP && okC) ? '1' : '.15';
+  });
+  document.getElementById('f-todo').setAttribute('aria-pressed', !fPer);
+  document.querySelectorAll('#f-per button').forEach(b => b.setAttribute('aria-pressed', b.dataset.p===fPer));
+  document.getElementById('crit').setAttribute('aria-pressed', fCrit);
+}
+document.getElementById('f-todo').onclick = function(){ fPer=null; aplica(); };
+document.querySelectorAll('#f-per button').forEach(function(b){
+  b.onclick = function(){ fPer = fPer===b.dataset.p ? null : b.dataset.p; aplica(); };
+});
+document.getElementById('crit').onclick = function(){ fCrit=!fCrit; aplica(); };
+document.getElementById('theme').onclick = function(){
+  const dark = document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme', dark?'light':'dark');
+};
+document.querySelectorAll('#rango button').forEach(function(b){
+  b.onclick = function(){
+    rango = +b.dataset.r;
+    document.querySelectorAll('#rango button').forEach(x => x.setAttribute('aria-pressed', x===b));
+    render();
+  };
+});
+
+const tip = document.getElementById('tip');
+document.addEventListener('mouseover', function(e){
+  const el = e.target.closest('[data-t]'); if (!el) return;
+  const o = JSON.parse(decodeURIComponent(el.dataset.t));
+  tip.innerHTML = o.hito
+    ? '<b>'+o.n+'</b><div class="m">'+o.i+'</div>' + (o.e?'<div class="m">'+o.e+'</div>':'')
+    : '<b>'+o.n+'</b><div class="m">'+o.i+' → '+o.f+'</div><div class="m">'+o.r
+      + (o.v?' · revisa '+o.v:'')+'</div>'
+      + (o.e?'<div class="m">Entregable: '+o.e+'</div>':'')
+      + (o.c?'<div class="m">Camino crítico</div>':'');
+  tip.style.opacity = '1';
+});
+document.addEventListener('mousemove', function(e){
+  if (tip.style.opacity !== '1') return;
+  const r = tip.getBoundingClientRect();
+  tip.style.left = Math.min(e.clientX+14, innerWidth-r.width-10) + 'px';
+  tip.style.top  = Math.max(e.clientY-r.height-12, 8) + 'px';
+});
+document.addEventListener('mouseout', function(e){ if (e.target.closest('[data-t]')) tip.style.opacity='0'; });
+
+render();
+</script>
+</body>
+</html>
