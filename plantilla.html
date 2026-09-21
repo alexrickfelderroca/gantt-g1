@@ -12,414 +12,387 @@
 <style>
 :root{
   color-scheme:light;
-  --surface:#fcfcfb; --card:#fff; --sunken:#f4f3f0; --wknd:#f0efec;
-  --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#8b8a85;
-  --line:#e6e4df; --line-2:#d3d0c9;
-  --bar:#2a78d6; --crit:#e34948; --crit-soft:#f9dedd; --accent:#0d366b;
-  --nomb:300px;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  color-scheme:dark;
-  --surface:#1a1a19; --card:#232322; --sunken:#151514; --wknd:#1c1c1a;
-  --ink:#fff; --ink-2:#c3c2b7; --ink-3:#8b8a85;
-  --line:#333331; --line-2:#44443f;
-  --bar:#3987e5; --crit:#e66767; --crit-soft:#5c2b2b; --accent:#86b6ef;
-}}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --surface:#1a1a19; --card:#232322; --sunken:#151514; --wknd:#1c1c1a;
-  --ink:#fff; --ink-2:#c3c2b7; --ink-3:#8b8a85;
-  --line:#333331; --line-2:#44443f;
-  --bar:#3987e5; --crit:#e66767; --crit-soft:#5c2b2b; --accent:#86b6ef;
+  --surface:#fff; --card:#fff; --sunken:#f5f5f3; --hito:#eef3fa;
+  --ink:#111; --ink-2:#55544f; --ink-3:#8b8a85;
+  --line:#e7e5e0; --line-2:#d2cfc8;
+  --bar:#2a78d6; --crit:#e34948; --crit-soft:#fbe6e5; --accent:#0d366b;
+  --ok:#1baf7a;
+  --nomb:330px; --col:32px; --fila:34px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{background:var(--surface);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",sans-serif;
   font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1440px;margin:0 auto;padding:0 16px 80px}
+.wrap{max-width:1500px;margin:0 auto;padding:26px 16px 80px}
 
-header{padding:44px 0 26px;border-bottom:1px solid var(--line);margin-bottom:24px}
-.eyebrow{font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
-h1{font-size:clamp(28px,5vw,42px);line-height:1.08;font-weight:700;letter-spacing:-.024em;margin:0 0 10px}
-.sub{color:var(--ink-2);margin:0;max-width:62ch}
-.cards{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 20px;flex:1 1 170px}
-.kpi .h{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
-.kpi .n{font-size:32px;font-weight:700;letter-spacing:-.03em;line-height:1}
-.kpi .l{font-size:12.5px;color:var(--ink-2);margin-top:5px;line-height:1.35}
-.kpi.hot .n{color:var(--crit)}
+h1{font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.02em;margin:0 0 4px}
+.sub{color:var(--ink-3);margin:0 0 20px;font-size:13.5px}
 
-.bar-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.ctr{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:0 0 10px}
 .lbl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-right:2px}
-button{font:inherit;font-size:13px;font-weight:500;cursor:pointer;background:var(--card);color:var(--ink-2);
-  border:1px solid var(--line);border-radius:999px;padding:7px 14px;min-height:34px;transition:.12s}
+button{font:inherit;font-size:13px;font-weight:500;cursor:pointer;background:#fff;color:var(--ink-2);
+  border:1px solid var(--line);border-radius:999px;padding:6px 13px;min-height:32px;transition:.12s}
 button:hover{border-color:var(--line-2);color:var(--ink)}
-button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .spacer{flex:1}
 
-.legend{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--ink-2);margin:0 0 16px}
-.legend span{display:inline-flex;align-items:center;gap:7px}
-.sw{width:22px;height:8px;border-radius:4px;display:inline-block}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:12.5px;color:var(--ink-2);margin:0 0 14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:22px;height:10px;border-radius:3px;display:inline-block}
 .sw.b{background:var(--bar)} .sw.c{background:var(--crit)}
-.sw.o{background:transparent;border:1.5px solid var(--bar)}
-.sw.d{width:8px;height:8px;transform:rotate(45deg);border-radius:1px;background:var(--ink)}
-.sw.w{background:var(--wknd);border:1px solid var(--line-2)}
+.sw.h{background:var(--hito);border:1px solid var(--line-2)}
 
-/* ---------- gantt ---------- */
-.chart{border:1px solid var(--line);border-radius:10px;background:var(--card);overflow:hidden}
-.scroll{overflow-x:auto;overflow-y:hidden;position:relative}
+.chart{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.scroll{overflow-x:auto;position:relative}
 .grid{width:max-content;min-width:100%}
 
-.hd{display:flex;position:sticky;top:0;z-index:6;background:var(--card);border-bottom:1px solid var(--line)}
-.hd .pad{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:var(--card);
-  border-right:1px solid var(--line)}
-.hd .cols{position:relative}
-.hmes{display:flex;height:26px;border-bottom:1px solid var(--line)}
-.hmes span{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);
-  padding:6px 0 0 7px;border-left:1px solid var(--line-2);overflow:hidden;white-space:nowrap}
+.hd{display:flex;position:sticky;top:0;z-index:6;background:#fff;border-bottom:1px solid var(--line-2)}
+.pad{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:#fff;border-right:1px solid var(--line-2)}
+.cols{display:flex}
+.hmes{display:flex;height:24px;border-bottom:1px solid var(--line)}
+.hmes span{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);
+  padding:5px 0 0 6px;border-left:1px solid var(--line-2);overflow:hidden;white-space:nowrap}
 .hmes span:first-child{border-left:0}
-.hdia{display:flex;height:24px}
-.hdia i{font-size:10px;font-style:normal;color:var(--ink-3);text-align:center;padding-top:5px;
-  overflow:hidden;white-space:nowrap}
-.hdia i.we{background:var(--wknd)}
-.hdia i.hoy{color:var(--surface);background:var(--accent);font-weight:700;border-radius:3px}
+.hses{display:flex;height:34px}
+.hses i{flex:0 0 var(--col);font-style:normal;font-size:9.5px;line-height:1.15;color:var(--ink-3);
+  text-align:center;padding-top:5px;border-left:1px solid var(--line);white-space:nowrap}
+.hses i b{display:block;font-size:11px;font-weight:700;color:var(--ink-2)}
+.hses i.control,.hses i.entrega{background:var(--hito)}
+.hses i.control b,.hses i.entrega b{color:var(--accent)}
+.hses i.hoy{background:var(--accent)}
+.hses i.hoy,.hses i.hoy b{color:#fff}
 
 .phase{display:flex;background:var(--sunken);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.phase b{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:var(--sunken);
-  padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);
+.phase b{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:var(--sunken);padding:7px 14px;
+  font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-.row{display:flex;border-bottom:1px solid var(--line);height:30px}
+.row{display:flex;border-bottom:1px solid var(--line);height:var(--fila)}
 .row:last-of-type{border-bottom:0}
-.row .name{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:var(--card);
-  min-width:0;overflow:hidden;padding:0 12px 0 14px;font-size:13px;color:var(--ink-2);
-  display:flex;align-items:center;gap:8px;border-right:1px solid var(--line)}
+.row .name{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:#fff;min-width:0;
+  padding:0 10px 0 10px;font-size:13px;color:var(--ink-2);display:flex;align-items:center;gap:7px;
+  border-right:1px solid var(--line-2)}
 .row:hover .name{background:var(--sunken)}
-.txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.chip{flex:0 0 auto;font-size:9.5px;font-weight:700;letter-spacing:.04em;color:var(--ink-2);
-  background:var(--sunken);border:1px solid var(--line-2);border-radius:3px;padding:2px 4px;line-height:1}
-.row:hover .chip{background:var(--card)}
+.row.hecha .name .txt{text-decoration:line-through;color:var(--ink-3)}
+.row.hecha .bar{opacity:.3}
 
-.trk{position:relative;flex:0 0 auto}
-.row:hover .trk{background:rgba(127,127,127,.06)}
-.blk{position:absolute;top:0;bottom:0;background:var(--sunken);opacity:.9}
-.bar{position:absolute;top:50%;transform:translateY(-50%);height:11px;border-radius:4px;
-  background:var(--bar);min-width:3px;z-index:2}
+.tick{flex:0 0 auto;width:17px;height:17px;padding:0;min-height:0;border-radius:4px;
+  border:1.5px solid var(--line-2);background:#fff;cursor:pointer;position:relative}
+.tick:hover{border-color:var(--ink-3)}
+.tick[aria-pressed="true"]{background:var(--ok);border-color:var(--ok)}
+.tick[aria-pressed="true"]::after{content:"";position:absolute;left:4.5px;top:1px;width:4px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)}
+
+.ini{flex:0 0 auto;display:flex;gap:2px;background:none;border:0;padding:2px;min-height:0;cursor:pointer;border-radius:5px}
+.ini:hover{background:var(--hito)}
+.ini span{font-size:9px;font-weight:700;letter-spacing:.03em;color:var(--ink-2);background:var(--sunken);
+  border:1px solid var(--line-2);border-radius:3px;padding:2px 3px;line-height:1}
+.ini span.mas{background:#fff;color:var(--ink-3)}
+.txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+
+.trk{position:relative;flex:0 0 auto;display:flex}
+.trk u{flex:0 0 var(--col);border-left:1px solid var(--line);text-decoration:none}
+.trk u.hito{background:var(--hito)}
+.row:hover .trk{background:rgba(0,0,0,.02)}
+.bar{position:absolute;top:50%;transform:translateY(-50%);height:18px;border-radius:5px;
+  background:var(--bar);z-index:2;cursor:pointer}
 .bar.crit{background:var(--crit)}
-.bar.corr{background:transparent;border:1.5px solid var(--bar)}
-.bar.crit.corr{border-color:var(--crit)}
-.today{position:absolute;top:0;bottom:0;width:1.5px;background:var(--accent);z-index:4}
+.bar:hover{filter:brightness(1.08)}
 
-.mstrip{display:flex;border-top:1px solid var(--line-2);background:var(--card)}
-.mstrip .pad{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:var(--card);
-  padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
-  color:var(--ink-2);border-right:1px solid var(--line)}
-.mstrip .trk{height:40px}
-.ms{position:absolute;top:14px;width:9px;height:9px;background:var(--ink);
-  transform:rotate(45deg) translate(-50%,0);transform-origin:left;border-radius:1px;z-index:3}
-.ms.soft{background:transparent;border:1.5px solid var(--ink-3)}
+/* ---------- modal ---------- */
+.velo{position:fixed;inset:0;background:rgba(15,15,15,.45);display:none;z-index:50;
+  align-items:center;justify-content:center;padding:20px}
+.velo.on{display:flex}
+.modal{background:#fff;border-radius:14px;max-width:560px;width:100%;max-height:86vh;overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,.28);padding:26px 28px 24px}
+.modal h2{margin:0 0 6px;font-size:20px;font-weight:700;letter-spacing:-.015em;line-height:1.25}
+.modal .cuando{color:var(--ink-3);font-size:13px;margin:0 0 16px}
+.modal .desc{margin:0 0 18px;color:var(--ink-2);font-size:14.5px}
+.modal dl{display:grid;grid-template-columns:118px 1fr;gap:9px 14px;margin:0 0 18px;font-size:13.5px}
+.modal dt{color:var(--ink-3);font-weight:500}
+.modal dd{margin:0;color:var(--ink-2)}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  border-radius:4px;padding:3px 7px}
+.badge.guia{background:#e6f4ee;color:#0d6b4a}
+.badge.plan{background:#e8eefa;color:#1c4b8f}
+.badge.grupo{background:#fdf0e3;color:#8a5115}
+.badge.crit{background:var(--crit-soft);color:#a32a29}
+.modal h3{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;padding-top:16px;border-top:1px solid var(--line)}
+.docs{list-style:none;margin:0 0 12px;padding:0;font-size:13.5px}
+.docs li{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}
+.docs a{color:var(--accent);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.docs a:hover{text-decoration:underline}
+.docs .mio{font-size:10px;color:var(--ink-3);border:1px solid var(--line-2);border-radius:3px;padding:1px 5px}
+.vacio{color:var(--ink-3);font-size:13.5px;margin:0 0 12px}
+.addoc{display:flex;gap:7px;flex-wrap:wrap}
+.addoc input{font:inherit;font-size:13px;padding:7px 11px;border:1px solid var(--line-2);border-radius:7px;flex:1;min-width:130px}
+.nota{font-size:12px;color:var(--ink-3);margin:10px 0 0;line-height:1.45}
+.cerrar{position:sticky;top:0;float:right;background:none;border:0;font-size:22px;line-height:1;color:var(--ink-3);
+  padding:0 0 0 12px;min-height:0;cursor:pointer}
 
-#tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--ink);
-  color:var(--surface);border-radius:7px;padding:9px 12px;font-size:12.5px;line-height:1.45;max-width:320px;
-  box-shadow:0 8px 28px rgba(0,0,0,.22)}
-#tip b{font-weight:600} #tip .m{opacity:.72;font-size:11.5px}
+.tarjetas{display:none}
+.tar{border:1px solid var(--line);border-left:3px solid var(--bar);border-radius:9px;padding:12px 14px;margin-bottom:8px}
+.tar.crit{border-left-color:var(--crit)}
+.tar.hecha h3{text-decoration:line-through;color:var(--ink-3)}
+.tar h3{margin:0 0 4px;font-size:14.5px;font-weight:600;line-height:1.35}
+.tar p{margin:0 0 6px;font-size:13px;color:var(--ink-2)}
+.tar .meta{font-size:12.5px;color:var(--ink-3)}
+.lfase{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  margin:22px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
 
-.list{display:none}
-.lphase{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
-  margin:24px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--line)}
-.item{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--bar);border-radius:9px;
-  padding:12px 15px;margin-bottom:8px}
-.item.crit{border-left-color:var(--crit)}
-.item h3{margin:0 0 5px;font-size:14.5px;font-weight:600;line-height:1.35}
-.item .meta{font-size:12.5px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px 12px}
-.tag{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--crit);
-  background:var(--crit-soft);border-radius:3px;padding:2px 6px}
+footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
+footer p{margin:4px 0}
 
-footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
-footer p{margin:5px 0}
-.hint{font-size:12.5px;color:var(--ink-3);margin:10px 0 0}
-
-@media (max-width:780px){
-  .chart,.legend,#zoom,.hint{display:none}
-  .list{display:block}
-  header{padding-top:28px}
-  .kpi{flex:1 1 100%}
+@media (max-width:820px){
+  .chart,.legend,#f-esc{display:none}
+  .tarjetas{display:block}
+  .modal{padding:22px 20px}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<header>
-  <p class="eyebrow">Proyecto Integrado · 2º GETI · IQS · Curso 26/27</p>
-  <h1>Plan de trabajo — Grupo 1</h1>
-  <p class="sub">Mecanismo plano de palancas de dos grupos de Assur. Cronograma de ejecución desde el arranque hasta la defensa ante tribunal.</p>
-  <div class="cards">
-    <div class="kpi hot"><div class="h">Próximo hito</div><div class="n" id="k1">—</div><div class="l" id="k1l"></div></div>
-    <div class="kpi"><div class="h">Entrega final</div><div class="n" id="k2">—</div><div class="l">5 de mayo de 2027</div></div>
-    <div class="kpi"><div class="h">Tareas</div><div class="n" id="k3">—</div><div class="l" id="k3l"></div></div>
-    <div class="kpi"><div class="h">Equipo</div><div class="n">6</div><div class="l">Alex R. · Raul O. · Jan D. · Victor G. · Marc B. · Ignasi S.</div></div>
-  </div>
-</header>
+<h1>Plan de trabajo — Grupo 1</h1>
+<p class="sub">Cada columna es una sesión de prácticas del Grupo 1. Pulsa las iniciales para ver el detalle.</p>
 
-<div class="bar-controls">
+<div class="ctr">
   <span class="lbl">Quién</span>
   <button id="f-todo" aria-pressed="true">Todos</button>
   <span id="f-per"></span>
-  <span class="spacer"></span>
-  <button id="crit" aria-pressed="false">Solo crítico</button>
-  <button id="theme">Tema</button>
 </div>
-<div class="bar-controls" id="zoom">
-  <span class="lbl">Escala</span>
-  <button data-z="0" aria-pressed="true">Días</button>
-  <button data-z="1" aria-pressed="false">Semanas</button>
-  <button data-z="2" aria-pressed="false">Curso entero</button>
-  <span class="spacer"></span>
-  <button id="ir-hoy">↦ Ir a hoy</button>
+<div class="ctr">
+  <span class="lbl">Filtrar</span>
+  <button id="f-crit" aria-pressed="false">Solo camino crítico</button>
+  <button id="f-guia" aria-pressed="false">Solo lo que exige la Guía</button>
+  <button id="f-pend" aria-pressed="false">Solo pendientes</button>
 </div>
 
 <div class="legend">
   <span><i class="sw b"></i> Tarea</span>
   <span><i class="sw c"></i> Camino crítico</span>
-  <span><i class="sw o"></i> Correcciones</span>
-  <span><i class="sw d"></i> Hito</span>
-  <span style="color:var(--accent)">│ Hoy</span>
-  <span id="lg-finde"><i class="sw w"></i> Finde / festivo</span>
+  <span><i class="sw h"></i> Control o entrega</span>
 </div>
 
 <div class="chart"><div class="scroll" id="scroll"><div class="grid" id="grid"></div></div></div>
-<p class="hint">Arrastra en horizontal para avanzar en el calendario. Pasa el ratón por una barra para ver fechas, responsable y entregable.</p>
 
-<div class="list" id="list"></div>
+<div class="tarjetas" id="tarjetas"></div>
 
 <footer>
   <p id="pie"></p>
-  <p>Los hitos con el rombo hueco tienen la fecha pendiente de confirmar con el profesor.</p>
+  <p>Equipo: Alex R. · Raul O. · Jan D. · Victor G. · Marc B. · Ignasi S. · Jordi A.</p>
 </footer>
 </div>
-<div id="tip"></div>
+
+<div class="velo" id="velo"><div class="modal" id="modal"></div></div>
 
 <script>
 const DATOS = /*__DATOS__*/{}/*__FIN__*/;
-const HOY = new Date(2026,8,21);
 const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-const DIA = ['D','L','M','X','J','V','S'];
-const MS = 864e5;
+const DIA = ['dom','lun','mar','mié','jue','vie','sáb'];
+const HOY = '21/09/2026';
 const d = s => { const [a,b,c] = s.split('/').map(Number); return new Date(c,b-1,a); };
-const fmt = x => x.toLocaleDateString('es-ES',{day:'numeric',month:'short'});
-const corto = n => { const x = n.split(/\s*[(;]| — /)[0].trim().replace(/[,.]$/,'');
-  return x.length > 56 ? x.slice(0,54).replace(/\s\S*$/,'')+'…' : x; };
-const cortoFase = n => n.replace(/^FASE \d+ — /,'').split('(')[0].trim();
-const esCorr = t => /correc/i.test(t.nombre);
+const FUENTE = {
+  guia:  ['guia','Guía'],
+  plan:  ['plan','Planificación'],
+  grupo: ['grupo','Decisión del grupo'],
+};
 
-const tareas = DATOS.tareas.map(t => ({...t, di:d(t.inicio), df:d(t.fin)}));
-const hitos  = DATOS.hitos.map(h => ({...h, dd:d(h.fecha)}));
-const bloqueos = (DATOS.bloqueos||[]).map(b => ({...b, bi:d(b.inicio), bf:d(b.fin)}));
-const fases  = DATOS.fases.map(f => f.nombre);
+const SES = DATOS.sesiones;
+const idx = f => SES.findIndex(s => s.fecha === f);
+// primera sesión >= fecha  /  última sesión <= fecha
+const desde = f => { const x = d(f); for (let i=0;i<SES.length;i++) if (d(SES[i].fecha) >= x) return i; return SES.length-1; };
+const hasta = f => { const x = d(f); for (let i=SES.length-1;i>=0;i--) if (d(SES[i].fecha) <= x) return i; return 0; };
 
-// T0 = lunes 14/09/2026, para que la trama de findes cuadre con la semana real
-const T0 = new Date(2026,8,14);
-const T1 = new Date(2027,4,23);
-const NDIAS = Math.round((T1-T0)/MS);
-const PPD = [26, 9, 3.4];               // px por día en cada escala
-let zoom = 0, fPer = null, fCrit = false;
+/* ---------- estado local (solo en este navegador) ---------- */
+const LS = {
+  get(k, def){ try { return JSON.parse(localStorage.getItem(k)) ?? def; } catch(e){ return def; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+};
+let hechas = LS.get('g1-hechas', []);
+let misDocs = LS.get('g1-docs', {});
 
-const x  = f => Math.round((f-T0)/MS) * PPD[zoom];         // px del inicio de ese día
-const xf = f => (Math.round((f-T0)/MS)+1) * PPD[zoom];     // px del final de ese día
+let fPer = null, fCrit = false, fGuia = false, fPend = false;
 
-(function(){
-  const p = hitos.filter(h => h.dd >= HOY).sort((a,b)=>a.dd-b.dd)[0];
-  if (p) {
-    const n = Math.round((p.dd-HOY)/MS);
-    document.getElementById('k1').textContent = n + (n===1?' día':' días');
-    document.getElementById('k1l').textContent = corto(p.nombre) + ' · ' + fmt(p.dd);
-  }
-  document.getElementById('k2').textContent = Math.round((new Date(2027,4,5)-HOY)/MS) + ' días';
-  document.getElementById('k3').textContent = tareas.length;
-  document.getElementById('k3l').textContent = tareas.filter(t=>t.critica).length + ' en el camino crítico';
-  document.getElementById('pie').textContent =
-    tareas.length + ' tareas · ' + fases.length + ' fases · ' + hitos.length + ' hitos · del 21 sept 2026 al 13 may 2027';
-})();
-
+/* ---------- pintar ---------- */
 function cabecera(){
-  const W = NDIAS * PPD[zoom];
-  // fila de meses
   let meses = '', ini = 0;
-  for (let i=1; i<=NDIAS; i++){
-    const f = new Date(T0.getTime()+i*MS);
-    if (i===NDIAS || f.getDate()===1){
-      const f0 = new Date(T0.getTime()+ini*MS);
-      const an = f0.getFullYear()===2027 ? " '27" : '';
-      meses += '<span style="flex:0 0 '+((i-ini)*PPD[zoom])+'px">'+MES[f0.getMonth()]+an+'</span>';
+  for (let i=1; i<=SES.length; i++){
+    const cambia = i===SES.length || d(SES[i].fecha).getMonth() !== d(SES[ini].fecha).getMonth();
+    if (cambia){
+      const f = d(SES[ini].fecha);
+      const an = f.getFullYear()===2027 ? " '27" : '';
+      meses += '<span style="flex:0 0 '+((i-ini)*32)+'px">'+MES[f.getMonth()]+an+'</span>';
       ini = i;
     }
   }
-  // fila de días (o de semanas, o nada)
-  let dias = '';
-  if (zoom === 0){
-    for (let i=0; i<NDIAS; i++){
-      const f = new Date(T0.getTime()+i*MS), g = f.getDay();
-      const hoy = f.getTime()===HOY.getTime();
-      dias += '<i class="'+(hoy?'hoy':(g===0||g===6?'we':''))+'" style="flex:0 0 '+PPD[zoom]+'px">'
-            + f.getDate()+'</i>';
-    }
-  } else if (zoom === 1){
-    for (let i=0; i<NDIAS; i+=7){
-      const f = new Date(T0.getTime()+i*MS);
-      dias += '<i style="flex:0 0 '+(7*PPD[zoom])+'px;border-left:1px solid var(--line)">'+f.getDate()+'</i>';
-    }
-  }
-  return '<div class="hd"><div class="pad"></div><div class="cols" style="width:'+W+'px">'
-       + '<div class="hmes">'+meses+'</div>'
-       + (dias ? '<div class="hdia">'+dias+'</div>' : '')
-       + '</div></div>';
+  const ses = SES.map(function(s){
+    const f = d(s.fecha), cls = s.fecha===HOY ? 'hoy' : s.tipo;
+    return '<i class="'+cls+'" title="'+(s.nota||DIA[f.getDay()]+' '+s.fecha)+'">'
+         + DIA[f.getDay()] + '<b>' + f.getDate() + '</b></i>';
+  }).join('');
+  return '<div class="hd"><div class="pad"></div><div><div class="hmes">'+meses+'</div>'
+       + '<div class="hses">'+ses+'</div></div></div>';
 }
 
-function fondo(){
-  const p = PPD[zoom], semana = 7*p;
-  // A 3 px por dia las franjas de fin de semana no informan, solo hacen ruido.
-  if (zoom === 2) return 'none';
-  // La trama arranca en lunes: sabado y domingo son los dias 5 y 6 de cada ciclo.
-  let bg = 'repeating-linear-gradient(90deg,transparent 0 '+(5*p)+'px,var(--wknd) '+(5*p)+'px '+semana+'px)';
-  bg += zoom === 0
-    ? ',repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px '+p+'px)'
-    : ',repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px '+semana+'px)';
-  return bg;
+const celdas = SES.map(s => '<u class="'+(s.tipo!=='sesion'?'hito':'')+'"></u>').join('');
+
+function fila(t){
+  const a = desde(t.inicio), b = hasta(t.fin);
+  const l = a*32, w = Math.max((b-a+1)*32 - 4, 12);
+  const chips = t.responsables.length > 3
+    ? t.responsables.slice(0,2).map(r => '<span>'+ini(r)+'</span>').join('')
+        + '<span class="mas">+'+(t.responsables.length-2)+'</span>'
+    : t.responsables.map(r => '<span>'+ini(r)+'</span>').join('');
+  return '<div class="row'+(hechas.includes(t.id)?' hecha':'')+'" data-id="'+t.id+'">'
+    + '<div class="name">'
+    +   '<button class="tick" data-tick="'+t.id+'" aria-pressed="'+hechas.includes(t.id)+'" '
+    +     'title="Marcar como hecha" aria-label="Marcar '+esc(t.nombre)+' como hecha"></button>'
+    +   '<button class="ini" data-ver="'+t.id+'" title="Ver detalle">'+chips+'</button>'
+    +   '<span class="txt" title="'+esc(t.nombre)+'">'+esc(t.nombre)+'</span>'
+    + '</div>'
+    + '<div class="trk">'+celdas
+    +   '<div class="bar'+(t.critica?' crit':'')+'" data-ver="'+t.id+'" '
+    +   'style="left:'+(l+2)+'px;width:'+w+'px"></div>'
+    + '</div></div>';
 }
+
+const ini = n => n.replace('.','').split(' ').map(w => w[0]).join('').toUpperCase();
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 
 function render(){
-  const W = NDIAS * PPD[zoom], BG = fondo();
-  const est = 'style="width:'+W+'px;background-image:'+BG+'"';
-  const bandas = bloqueos.map(b =>
-      '<i class="blk" style="left:'+x(b.bi)+'px;width:'+Math.max(xf(b.bf)-x(b.bi),2)+'px" title="'+b.motivo+'"></i>'
-    ).join('') + '<i class="today" style="left:'+x(HOY)+'px"></i>';
-
   let h = cabecera();
-  fases.forEach(function(fn){
-    const ts = tareas.filter(t => t.fase===fn);
+  DATOS.fases.forEach(function(fase){
+    const ts = DATOS.tareas.filter(t => t.fase===fase && visible(t));
     if (!ts.length) return;
-    h += '<div class="phase"><b title="'+fn+'">'+cortoFase(fn)+'</b><div class="trk" '+est+'></div></div>';
+    h += '<div class="phase"><b title="'+esc(fase)+'">'+esc(fase)+'</b>'
+       + '<div class="trk">'+celdas+'</div></div>';
+    ts.forEach(t => h += fila(t));
+  });
+  document.getElementById('grid').innerHTML = h || '<p style="padding:30px;color:#888">Nada que mostrar con estos filtros.</p>';
+
+  let c = '';
+  DATOS.fases.forEach(function(fase){
+    const ts = DATOS.tareas.filter(t => t.fase===fase && visible(t));
+    if (!ts.length) return;
+    c += '<div class="lfase">'+esc(fase)+'</div>';
     ts.forEach(function(t){
-      const l = x(t.di), w = Math.max(xf(t.df)-l, 3);
-      const meta = encodeURIComponent(JSON.stringify(
-        {n:t.nombre,i:t.inicio,f:t.fin,r:t.responsable,v:t.revisor,c:t.critica,e:t.entregable,x:t.descripcion}));
-      h += '<div class="row" data-per="'+t.responsable+'" data-crit="'+t.critica+'">'
-        + '<div class="name"><span class="chip">'+t.iniciales+'</span>'
-        + '<span class="txt" title="'+t.nombre+'">'+corto(t.nombre)+'</span></div>'
-        + '<div class="trk" '+est+'>'+bandas
-        + '<div class="bar'+(t.critica?' crit':'')+(esCorr(t)?' corr':'')+'" '
-        + 'style="left:'+l+'px;width:'+w+'px" data-t="'+meta+'"></div></div></div>';
+      c += '<div class="tar'+(t.critica?' crit':'')+(hechas.includes(t.id)?' hecha':'')+'" data-ver="'+t.id+'">'
+        + '<h3>'+esc(t.nombre)+'</h3><p>'+esc(t.descripcion)+'</p>'
+        + '<div class="meta">'+t.responsables.join(' · ')+' — '+t.inicio+' → '+t.fin+'</div></div>';
     });
   });
+  document.getElementById('tarjetas').innerHTML = c;
 
-  h += '<div class="mstrip"><div class="pad">Hitos</div><div class="trk" '+est+'>'+bandas
-    + hitos.map(function(v){
-        const soft = v.confirmado === false || /confirmar|probablemente/i.test(v.nombre+(v.detalle||''));
-        return '<i class="ms'+(soft?' soft':'')+'" style="left:'+(x(v.dd)+PPD[zoom]/2)+'px" data-t="'
-          + encodeURIComponent(JSON.stringify({n:v.nombre,i:v.fecha,hito:1,e:v.detalle||''}))+'"></i>';
-      }).join('')
-    + '</div></div>';
-
-  document.getElementById('grid').innerHTML = h;
-  document.getElementById('lg-finde').style.display = zoom === 2 ? 'none' : '';
-  aplica();
+  const v = DATOS.tareas.filter(visible).length;
+  document.getElementById('pie').textContent =
+    v + ' de ' + DATOS.tareas.length + ' tareas · ' + SES.length + ' sesiones del G1 · '
+    + hechas.length + ' marcadas como hechas';
 }
 
-function aHoy(suave){
-  const s = document.getElementById('scroll');
-  const nomb = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nomb'));
-  const destino = Math.max(x(HOY) - (s.clientWidth - nomb) * 0.18, 0);
-  s.scrollTo({left: destino, behavior: suave ? 'smooth' : 'auto'});
+function visible(t){
+  if (fPer && !t.responsables.includes(fPer)) return false;
+  if (fCrit && !t.critica) return false;
+  if (fGuia && t.fuente !== 'guia') return false;
+  if (fPend && hechas.includes(t.id)) return false;
+  return true;
 }
 
-(function(){
-  let l = '';
-  fases.forEach(function(fn){
-    const ts = tareas.filter(t => t.fase===fn);
-    if (!ts.length) return;
-    l += '<div class="lphase">'+cortoFase(fn)+'</div>';
-    ts.forEach(function(t){
-      l += '<div class="item'+(t.critica?' crit':'')+'" data-per="'+t.responsable+'" data-crit="'+t.critica+'">'
-        + '<h3>'+corto(t.nombre)+' '+(t.critica?'<span class="tag">crítica</span>':'')+'</h3>'
-        + '<div class="meta"><span><b>'+t.responsable+'</b></span><span>'+fmt(t.di)+' → '+fmt(t.df)+'</span>'
-        + (t.revisor ? '<span>revisa '+t.revisor+'</span>' : '') + '</div></div>';
-    });
-  });
-  document.getElementById('list').innerHTML = l;
-})();
+/* ---------- modal ---------- */
+function abrir(id){
+  const t = DATOS.tareas.find(x => x.id===id); if (!t) return;
+  const f = FUENTE[t.fuente] || ['grupo','—'];
+  const docs = (t.docs||[]).map(x => ({...x, mio:false}))
+    .concat((misDocs[id]||[]).map(x => ({...x, mio:true})));
+  document.getElementById('modal').innerHTML =
+      '<button class="cerrar" data-cerrar aria-label="Cerrar">&times;</button>'
+    + '<h2>'+esc(t.nombre)+'</h2>'
+    + '<p class="cuando">'+t.inicio+' → '+t.fin+' · '+esc(t.fase)+'</p>'
+    + '<p class="desc">'+esc(t.descripcion)+'</p>'
+    + '<dl>'
+    +   '<dt>Responsables</dt><dd>'+t.responsables.join(', ')+'</dd>'
+    +   '<dt>De dónde sale</dt><dd><span class="badge '+f[0]+'">'+f[1]+'</span>'
+    +     (t.cita ? '<br><span style="font-size:12.5px;color:#8b8a85">'+esc(t.cita)+'</span>' : '')+'</dd>'
+    +   (t.critica ? '<dt>Camino crítico</dt><dd><span class="badge crit">sin holgura</span></dd>' : '')
+    +   '<dt>Estado</dt><dd>'+(hechas.includes(t.id)?'Hecha':'Pendiente')+'</dd>'
+    + '</dl>'
+    + '<h3>Documentos</h3>'
+    + (docs.length
+        ? '<ul class="docs">'+docs.map(x =>
+            '<li><a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.nombre)+'</a>'
+            + (x.mio?'<span class="mio">solo tú</span>':'')+'</li>').join('')+'</ul>'
+        : '<p class="vacio">Todavía no hay ningún documento atado a esta tarea.</p>')
+    + '<div class="addoc">'
+    +   '<input id="dn" placeholder="Nombre del documento">'
+    +   '<input id="du" placeholder="Enlace (OneDrive, Drive…)">'
+    +   '<button data-add="'+t.id+'">Atar</button>'
+    + '</div>'
+    + '<p class="nota">La página es estática, así que no puede alojar archivos: los documentos se suben a la '
+    + 'carpeta de OneDrive del grupo y aquí se ata el enlace. Lo que ates desde aquí solo lo ves tú en este '
+    + 'navegador; para que lo vea todo el grupo hay que añadirlo a <code>datos.json</code> en el repositorio.</p>';
+  document.getElementById('velo').classList.add('on');
+}
+function cerrar(){ document.getElementById('velo').classList.remove('on'); }
 
-const PERS = [...new Set(tareas.map(t=>t.responsable))].filter(p=>p!=='TODOS').sort();
+/* ---------- eventos ---------- */
+document.addEventListener('click', function(e){
+  const tick = e.target.closest('[data-tick]');
+  if (tick){
+    const id = tick.dataset.tick;
+    hechas = hechas.includes(id) ? hechas.filter(x => x!==id) : hechas.concat(id);
+    LS.set('g1-hechas', hechas);
+    render();
+    return;
+  }
+  const ver = e.target.closest('[data-ver]');
+  if (ver){ abrir(ver.dataset.ver); return; }
+  const add = e.target.closest('[data-add]');
+  if (add){
+    const id = add.dataset.add;
+    const n = document.getElementById('dn').value.trim();
+    const u = document.getElementById('du').value.trim();
+    if (!n || !u) return;
+    misDocs[id] = (misDocs[id]||[]).concat({nombre:n, url:u});
+    LS.set('g1-docs', misDocs);
+    abrir(id);
+    return;
+  }
+  if (e.target.closest('[data-cerrar]') || e.target.id==='velo') cerrar();
+});
+addEventListener('keydown', e => { if (e.key==='Escape') cerrar(); });
+
+const PERS = DATOS.equipo.map(p => p.nombre);
 document.getElementById('f-per').innerHTML =
   PERS.map(p => '<button data-p="'+p+'" aria-pressed="false">'+p+'</button>').join(' ');
 
-function aplica(){
-  document.querySelectorAll('.row,.item').forEach(function(el){
-    const okP = !fPer || el.dataset.per===fPer || el.dataset.per==='TODOS';
-    const okC = !fCrit || el.dataset.crit==='true';
-    el.style.opacity = (okP && okC) ? '1' : '.18';
-  });
+function botones(){
   document.getElementById('f-todo').setAttribute('aria-pressed', !fPer);
   document.querySelectorAll('#f-per button').forEach(b => b.setAttribute('aria-pressed', b.dataset.p===fPer));
-  document.getElementById('crit').setAttribute('aria-pressed', fCrit);
+  document.getElementById('f-crit').setAttribute('aria-pressed', fCrit);
+  document.getElementById('f-guia').setAttribute('aria-pressed', fGuia);
+  document.getElementById('f-pend').setAttribute('aria-pressed', fPend);
 }
-document.getElementById('f-todo').onclick = function(){ fPer=null; aplica(); };
-document.querySelectorAll('#f-per button').forEach(function(b){
-  b.onclick = function(){ fPer = fPer===b.dataset.p ? null : b.dataset.p; aplica(); };
-});
-document.getElementById('crit').onclick = function(){ fCrit=!fCrit; aplica(); };
-document.getElementById('theme').onclick = function(){
-  const dark = document.documentElement.getAttribute('data-theme')==='dark';
-  document.documentElement.setAttribute('data-theme', dark?'light':'dark');
-};
-document.getElementById('ir-hoy').onclick = function(){ aHoy(true); };
-document.querySelectorAll('#zoom button[data-z]').forEach(function(b){
-  b.onclick = function(){
-    const s = document.getElementById('scroll');
-    const nomb = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nomb'));
-    const centro = (s.scrollLeft + (s.clientWidth - nomb)/2) / PPD[zoom];   // día que hay en el centro
-    zoom = +b.dataset.z;
-    document.querySelectorAll('#zoom button[data-z]').forEach(v => v.setAttribute('aria-pressed', v===b));
-    render();
-    s.scrollLeft = Math.max(centro*PPD[zoom] - (s.clientWidth - nomb)/2, 0);  // mantener el punto de vista
-  };
-});
+document.getElementById('f-todo').onclick = () => { fPer=null; botones(); render(); };
+document.querySelectorAll('#f-per button').forEach(b =>
+  b.onclick = () => { fPer = fPer===b.dataset.p ? null : b.dataset.p; botones(); render(); });
+document.getElementById('f-crit').onclick = () => { fCrit=!fCrit; botones(); render(); };
+document.getElementById('f-guia').onclick = () => { fGuia=!fGuia; botones(); render(); };
+document.getElementById('f-pend').onclick = () => { fPend=!fPend; botones(); render(); };
 
-/* arrastrar para desplazar */
+/* arrastrar el calendario */
 (function(){
   const s = document.getElementById('scroll');
-  let abajo = false, x0 = 0, s0 = 0;
+  let ab=false, x0=0, s0=0;
   s.addEventListener('pointerdown', e => {
-    if (e.target.closest('.name')) return;
-    abajo = true; x0 = e.clientX; s0 = s.scrollLeft; s.style.cursor = 'grabbing';
+    if (e.target.closest('.name') || e.target.closest('.bar')) return;
+    ab=true; x0=e.clientX; s0=s.scrollLeft; s.style.cursor='grabbing';
   });
-  addEventListener('pointerup', () => { abajo = false; s.style.cursor = ''; });
-  addEventListener('pointermove', e => { if (abajo) s.scrollLeft = s0 - (e.clientX - x0); });
+  addEventListener('pointerup', () => { ab=false; s.style.cursor=''; });
+  addEventListener('pointermove', e => { if (ab) s.scrollLeft = s0-(e.clientX-x0); });
 })();
 
-const tip = document.getElementById('tip');
-document.addEventListener('mouseover', function(e){
-  const el = e.target.closest('[data-t]'); if (!el) return;
-  const o = JSON.parse(decodeURIComponent(el.dataset.t));
-  tip.innerHTML = o.hito
-    ? '<b>'+o.n+'</b><div class="m">'+o.i+'</div>' + (o.e?'<div class="m">'+o.e+'</div>':'')
-    : '<b>'+o.n+'</b><div class="m">'+o.i+' → '+o.f+'</div><div class="m">'+o.r
-      + (o.v?' · revisa '+o.v:'')+'</div>'
-      + (o.x?'<div class="m">'+o.x+'</div>':'')
-      + (o.e?'<div class="m">Entregable: '+o.e+'</div>':'')
-      + (o.c?'<div class="m">Camino crítico</div>':'');
-  tip.style.opacity = '1';
-});
-document.addEventListener('mousemove', function(e){
-  if (tip.style.opacity !== '1') return;
-  const r = tip.getBoundingClientRect();
-  tip.style.left = Math.min(e.clientX+14, innerWidth-r.width-10) + 'px';
-  tip.style.top  = Math.max(e.clientY-r.height-12, 8) + 'px';
-});
-document.addEventListener('mouseout', function(e){ if (e.target.closest('[data-t]')) tip.style.opacity='0'; });
-
 render();
-aHoy(false);
 </script>
 </body>
 </html>
