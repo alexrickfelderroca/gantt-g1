@@ -125,8 +125,17 @@ button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--
 .docs a:hover{text-decoration:underline}
 .docs .mio{font-size:10px;color:var(--ink-3);border:1px solid var(--line-2);border-radius:3px;padding:1px 5px}
 .docs .quitar{margin-left:auto;flex:0 0 auto;border:0;background:none;color:var(--ink-3);font-size:17px;
-  line-height:1;padding:0 4px;min-height:0;cursor:pointer}
-.docs .quitar:hover{color:var(--crit)}
+  line-height:1;padding:0 4px;min-height:0;cursor:pointer;border-radius:4px}
+.docs .quitar:hover{color:var(--crit);background:var(--crit-soft)}
+.docs .quitar:disabled{opacity:.4;cursor:default}
+.docs .icono{flex:0 0 auto;font-size:13px;opacity:.75}
+
+.acciones{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.mas{font-size:13px;font-weight:500;border:1px dashed var(--line-2);border-radius:8px;padding:9px 14px}
+.mas:hover{border-style:solid;border-color:var(--accent);color:var(--accent)}
+.subiendo{font-size:12.5px;color:var(--ink-2);background:var(--sunken);border-radius:7px;
+  padding:9px 12px;margin-bottom:10px}
+.subiendo .mal{color:var(--crit)}
 
 .estado{font-size:12px;color:var(--ink-3);display:inline-flex;align-items:center;gap:6px}
 .estado::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ink-3);flex:0 0 auto}
@@ -579,12 +588,7 @@ const DATOS = /*__DATOS__*/{
    "fuente": "guia",
    "critica": true,
    "cita": "Guía 3.3.a",
-   "docs": [
-    {
-     "nombre": "Croquis_V.1_21-09-26.SLDASM",
-     "url": "https://iqsedu-my.sharepoint.com"
-    }
-   ]
+   "docs": []
   },
   {
    "id": "1.8",
@@ -1617,19 +1621,44 @@ const DB = {
     });
     if (!r.ok) throw new Error('marcar: ' + r.status);
   },
-  async atar(id, nombre, url){
+  async atar(id, nombre, url, storagePath){
     const r = await fetch(CFG.url + '/rest/v1/documentos', {
-      method: 'POST', headers: this.cab(), body: JSON.stringify({ tarea_id: id, nombre, url }),
+      method: 'POST', headers: this.cab(),
+      body: JSON.stringify({ tarea_id: id, nombre, url, storage_path: storagePath || null }),
     });
-    if (!r.ok) throw new Error('atar: ' + r.status);
+    if (!r.ok) throw new Error('atar: ' + r.status + ' ' + (await r.text()).slice(0,120));
   },
-  async desatar(docId){
+  async desatar(docId, storagePath){
+    if (storagePath){
+      // Borra primero el archivo; si ya no estaba, seguimos igualmente.
+      await fetch(CFG.url + '/storage/v1/object/documentos/' + storagePath, {
+        method: 'DELETE', headers: { apikey: CFG.key, Authorization: 'Bearer ' + CFG.key },
+      }).catch(() => {});
+    }
     const r = await fetch(CFG.url + '/rest/v1/documentos?id=eq.' + docId, {
       method: 'DELETE', headers: this.cab(),
     });
     if (!r.ok) throw new Error('desatar: ' + r.status);
   },
+  // Sube un archivo al cubo público y devuelve {url, path}
+  async subir(tareaId, archivo){
+    const limpio = archivo.name.replace(/[^\w.\-]+/g, '_');
+    const path = tareaId + '/' + Date.now() + '-' + limpio;
+    const r = await fetch(CFG.url + '/storage/v1/object/documentos/' + path, {
+      method: 'POST',
+      headers: {
+        apikey: CFG.key, Authorization: 'Bearer ' + CFG.key,
+        'Content-Type': archivo.type || 'application/octet-stream',
+        'x-upsert': 'true',
+      },
+      body: archivo,
+    });
+    if (!r.ok) throw new Error('subir: ' + r.status + ' ' + (await r.text()).slice(0,120));
+    return { url: CFG.url + '/storage/v1/object/public/documentos/' + path, path };
+  },
 };
+const MAX_MB = 45;
+const peso = b => b < 1024*1024 ? Math.round(b/1024) + ' KB' : (b/1048576).toFixed(1) + ' MB';
 
 let hechas  = DB.on ? [] : LS.get('g1-hechas', []);
 let dbDocs  = {};                       // tarea_id -> [{id, nombre, url}]
@@ -1749,7 +1778,7 @@ function abrir(id){
   const f = FUENTE[t.fuente] || ['grupo','—'];
   const docs = (t.docs||[]).map(x => ({...x, fijo:true}))
     .concat((dbDocs[id]||[]).map(x => ({...x, fijo:false})))
-    .concat((misDocs[id]||[]).map(x => ({...x, fijo:false, solomio:true})));
+    .concat((misDocs[id]||[]).map((x, i) => ({...x, fijo:false, solomio:true, local:i})));
   const marca = cuando[t.id]
     ? ' · marcada el ' + new Date(cuando[t.id]).toLocaleDateString('es-ES',
         {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})
@@ -1768,26 +1797,73 @@ function abrir(id){
     + '</dl>'
     + '<h3>Documentos</h3>'
     + (docs.length
-        ? '<ul class="docs">'+docs.map(x =>
-            '<li><a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.nombre)+'</a>'
-            + (x.solomio ? '<span class="mio">solo tú</span>' : '')
-            + (x.id ? '<button class="quitar" data-quitar="'+x.id+'" data-tarea="'+t.id+'" '
-                    + 'title="Quitar" aria-label="Quitar documento">&times;</button>' : '')
-            + '</li>').join('')+'</ul>'
+        ? '<ul class="docs">'+docs.map(function(x){
+            const borrar = x.id
+              ? '<button class="quitar" data-quitar="'+x.id+'" data-tarea="'+t.id+'" '
+                + 'data-path="'+esc(x.storage_path||'')+'" title="Borrar" aria-label="Borrar documento">&times;</button>'
+              : (x.local !== undefined
+                  ? '<button class="quitar" data-quitar-local="'+x.local+'" data-tarea="'+t.id+'" '
+                    + 'title="Borrar" aria-label="Borrar documento">&times;</button>'
+                  : '');
+            return '<li>'
+              + '<span class="icono">'+(x.storage_path ? '📎' : '🔗')+'</span>'
+              + '<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.nombre)+'</a>'
+              + (x.solomio ? '<span class="mio">solo tú</span>' : '')
+              + (x.fijo ? '<span class="mio">del código</span>' : '')
+              + borrar + '</li>';
+          }).join('')+'</ul>'
         : '<p class="vacio">Todavía no hay ningún documento atado a esta tarea.</p>')
-    + '<div class="addoc">'
+    + '<div id="subiendo" class="subiendo" hidden></div>'
+    + '<div class="acciones">'
+    +   '<button class="mas" data-subir="'+t.id+'">＋ Subir archivo</button>'
+    +   '<button class="mas" data-enlace="'+t.id+'">🔗 Añadir enlace</button>'
+    +   '<input type="file" id="picker" multiple hidden>'
+    + '</div>'
+    + '<div class="addoc" id="formenlace" hidden>'
     +   '<input id="dn" placeholder="Nombre del documento">'
-    +   '<input id="du" placeholder="Enlace (OneDrive, Drive…)">'
+    +   '<input id="du" placeholder="https://…">'
     +   '<button data-add="'+t.id+'">Atar</button>'
     + '</div>'
-    + '<p class="nota">La página no puede alojar archivos: el archivo se sube a la carpeta de OneDrive del '
-    + 'grupo y aquí se guarda el enlace. '
-    + (DB.on ? 'Lo que ates lo ve todo el grupo.'
-             : 'Sin base de datos configurada, lo que ates solo lo ves tú en este navegador.')
+    + '<p class="nota">'
+    + (DB.on
+        ? 'Los archivos se suben al almacenamiento del grupo y los ve todo el mundo. '
+          + 'Máximo ' + MAX_MB + ' MB por archivo. Para algo más grande, usa el enlace a OneDrive.'
+        : '⚠️ Sin base de datos conectada no se pueden subir archivos, y lo que ates aquí '
+          + 'solo lo verás tú en este navegador.')
     + '</p>';
   document.getElementById('velo').classList.add('on');
 }
 function cerrar(){ document.getElementById('velo').classList.remove('on'); }
+
+async function subirArchivos(tareaId, lista){
+  const archivos = [...lista];
+  if (!archivos.length) return;
+  const caja = document.getElementById('subiendo');
+  const grandes = archivos.filter(a => a.size > MAX_MB * 1048576);
+  if (grandes.length){
+    caja.hidden = false;
+    caja.innerHTML = '<span class="mal">Demasiado grande: ' + grandes.map(a => esc(a.name)
+      + ' (' + peso(a.size) + ')').join(', ') + '. El tope son ' + MAX_MB
+      + ' MB — sube ese a OneDrive y ata el enlace.</span>';
+    if (grandes.length === archivos.length) return;
+  }
+  const buenos = archivos.filter(a => a.size <= MAX_MB * 1048576);
+  for (let i = 0; i < buenos.length; i++){
+    const a = buenos[i];
+    caja.hidden = false;
+    caja.innerHTML = 'Subiendo ' + (i+1) + ' de ' + buenos.length + ': '
+                   + esc(a.name) + ' (' + peso(a.size) + ')…';
+    try {
+      const sub = await DB.subir(tareaId, a);
+      await DB.atar(tareaId, a.name, sub.url, sub.path);
+    } catch (err) {
+      caja.innerHTML = '<span class="mal">Falló ' + esc(a.name) + ': ' + esc(err.message) + '</span>';
+      return;
+    }
+  }
+  await sincronizar(true);
+  abrir(tareaId);
+}
 
 /* ---------- eventos ---------- */
 document.addEventListener('click', function(e){
@@ -1810,8 +1886,33 @@ document.addEventListener('click', function(e){
   const quitar = e.target.closest('[data-quitar]');
   if (quitar){
     const docId = quitar.dataset.quitar, id = quitar.dataset.tarea;
-    DB.desatar(docId).then(() => sincronizar(true)).then(() => abrir(id))
-      .catch(err => estado('No se pudo quitar: ' + err.message, 'err'));
+    quitar.disabled = true;
+    DB.desatar(docId, quitar.dataset.path || null)
+      .then(() => sincronizar(true)).then(() => abrir(id))
+      .catch(err => { quitar.disabled = false; estado('No se pudo borrar: ' + err.message, 'err'); });
+    return;
+  }
+  const quitarL = e.target.closest('[data-quitar-local]');
+  if (quitarL){
+    const i = +quitarL.dataset.quitarLocal, id = quitarL.dataset.tarea;
+    misDocs[id] = (misDocs[id]||[]).filter((_, n) => n !== i);
+    LS.set('g1-docs', misDocs);
+    abrir(id);
+    return;
+  }
+  const verEnlace = e.target.closest('[data-enlace]');
+  if (verEnlace){
+    const f = document.getElementById('formenlace');
+    f.hidden = !f.hidden;
+    if (!f.hidden) document.getElementById('dn').focus();
+    return;
+  }
+  const subir = e.target.closest('[data-subir]');
+  if (subir){
+    if (!DB.on){ estado('Conecta la base de datos para poder subir archivos', 'err'); return; }
+    const picker = document.getElementById('picker');
+    picker.onchange = () => subirArchivos(subir.dataset.subir, picker.files);
+    picker.click();
     return;
   }
   const ver = e.target.closest('[data-ver]');
