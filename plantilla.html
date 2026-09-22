@@ -61,6 +61,8 @@ button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--
 .hses i.control b,.hses i.entrega b{color:var(--accent)}
 .hses i.hoy{background:var(--accent)}
 .hses i.hoy,.hses i.hoy b{color:#fff}
+.hses i.proxima{box-shadow:inset 0 -2px 0 var(--accent)}
+.hses i.proxima b{color:var(--accent)}
 
 .phase{display:flex;background:var(--sunken);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .phase b{flex:0 0 var(--nomb);position:sticky;left:0;z-index:3;background:var(--sunken);padding:7px 14px;
@@ -213,7 +215,13 @@ const DATOS = /*__DATOS__*/{}/*__FIN__*/;
 const CFG   = /*__CFG__*/{}/*__FINCFG__*/;
 const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const DIA = ['dom','lun','mar','mié','jue','vie','sáb'];
-const HOY = '21/09/2026';
+// Se calcula en cada pintado, no al cargar: si alguien deja la pestaña abierta
+// toda la noche, al día siguiente el resaltado se mueve solo.
+const dosDig = n => String(n).padStart(2, '0');
+const hoyStr = () => {
+  const h = new Date();
+  return dosDig(h.getDate()) + '/' + dosDig(h.getMonth() + 1) + '/' + h.getFullYear();
+};
 const d = s => { const [a,b,c] = s.split('/').map(Number); return new Date(c,b-1,a); };
 const FUENTE = {
   guia:  ['guia','Guía'],
@@ -333,9 +341,19 @@ function cabecera(){
       ini = i;
     }
   }
-  const ses = SES.map(function(s){
-    const f = d(s.fecha), cls = s.fecha===HOY ? 'hoy' : s.tipo;
-    return '<i class="'+cls+'" title="'+(s.nota||DIA[f.getDay()]+' '+s.fecha)+'">'
+  const HOY = hoyStr();
+  const ahora = d(HOY);
+  // Si hoy no es día de clase, se señala la siguiente sesión del grupo.
+  const iProx = SES.findIndex(s => d(s.fecha) >= ahora);
+  const ses = SES.map(function(s, i){
+    const f = d(s.fecha);
+    const esHoy = s.fecha === HOY;
+    const cls = esHoy ? 'hoy' : (i === iProx ? s.tipo + ' proxima' : s.tipo);
+    const cuantos = Math.round((f - ahora) / 86400000);
+    const pista = s.nota || (DIA[f.getDay()] + ' ' + s.fecha);
+    const sufijo = esHoy ? ' · HOY'
+                 : (i === iProx ? ' · próxima sesión, dentro de ' + cuantos + (cuantos === 1 ? ' día' : ' días') : '');
+    return '<i class="'+cls+'" title="'+esc(pista + sufijo)+'">'
          + DIA[f.getDay()] + '<b>' + f.getDate() + '</b></i>';
   }).join('');
   return '<div class="hd"><div class="pad"></div><div><div class="hmes">'+meses+'</div>'
