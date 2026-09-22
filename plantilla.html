@@ -17,7 +17,7 @@
   --line:#e7e5e0; --line-2:#d2cfc8;
   --bar:#2a78d6; --crit:#e34948; --crit-soft:#fbe6e5; --accent:#0d366b;
   --ok:#1baf7a;
-  --nomb:330px; --col:32px; --fila:34px;
+  --nomb:330px; --col:32px; --fila:40px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -96,7 +96,7 @@ button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--
 .trk u{flex:0 0 var(--col);border-left:1px solid var(--line);text-decoration:none}
 .trk u.hito{background:var(--hito)}
 .row:hover .trk{background:rgba(0,0,0,.02)}
-.bar{position:absolute;top:50%;transform:translateY(-50%);height:18px;border-radius:5px;
+.bar{position:absolute;top:50%;transform:translateY(-50%);height:24px;border-radius:6px;
   background:var(--bar);z-index:2;cursor:pointer}
 .bar.crit{background:var(--crit)}
 .bar:hover{filter:brightness(1.08)}
@@ -205,6 +205,8 @@ footer p{margin:4px 0}
 <footer>
   <p id="pie"></p>
   <p>Equipo: Alex R. · Raul O. · Jan D. · Victor G. · Marc B. · Ignasi S. · Jordi A.</p>
+  <p>Versión de la página: <b>/*__SELLO__*/sin sello/*__FINSELLO__*/</b> —
+     si no coincide con la última que te han dicho, recarga con Ctrl + F5.</p>
 </footer>
 </div>
 
